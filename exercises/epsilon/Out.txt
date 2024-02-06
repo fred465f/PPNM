@@ -1,0 +1,15 @@
+----- Part 1 -----
+My max int is = 2147483647
+My min int is = -2147483648
+
+----- Part 2 -----
+Machine epsilon for double is approx. = 2.22044604925031E-16 and should be 2.22044604925031E-16
+Machine epsilon for float is approx. = 1.192093E-07 and should be 1.19209289550781E-07
+
+----- Part 3 -----
+Sum A = 1, 
+Sum B = 1.00000000011102, 
+Difference is = -1.11022302462516E-10
+
+----- Part 4 -----
+They are equal!
