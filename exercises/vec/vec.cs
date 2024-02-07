@@ -6,7 +6,7 @@ public class vec {
 	public double x, y, z;
 
 	// Constructors
-    public vec() {x=y=z=0;}
+    public vec() {x=0; y=0; z=0;}
     public vec(double x, double y, double z) {this.x=x; this.y=y; this.z=z;}
 
     // Overload usefull operators
@@ -35,7 +35,7 @@ public class vec {
         this.print("");
     }
 
-    // Dot products, vector products and norms
+    // Dot product and norm
     public double dot(vec other) {
         return this.x*other.x + this.y*other.y + this.z*other.z;
     }
@@ -43,6 +43,23 @@ public class vec {
         return v.x*u.x + v.y*u.y + v.z*u.z;
     }
     public double norm() {
-        return Sqrt(vec.dot(this, this));
+		return Sqrt(this.dot(this));
     }
+
+    // Comparison method
+    static bool approx(double a, double b, double acc=1e-9, double err=1e-9) {
+        if (Abs(a-b) < acc) return true;
+        else if (Abs(a-b) < Max(Abs(a), Abs(b))*err) return true;
+        else return false;
+    }
+    public bool approx(vec other) {
+        if (!approx(this.x, other.x)) return false;
+        else if (!approx(this.y, other.y)) return false;
+        else if (!approx(this.z, other.z)) return false;
+        else return true;
+    }
+    public static bool approx(vec u, vec v) => u.approx(v);
+
+    // Override ToString method
+    public override string ToString() {return $"{this.x} {this.y} {this.z}";}
 }

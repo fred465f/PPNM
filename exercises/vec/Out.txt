@@ -1,1 +1,3 @@
-Hello!
+Orthogonality of standard basis vectors holds!
+- operator does return additive inverse for standard basis vectors!
+Mult. with 0 yields 0 vector!
