@@ -1,0 +1,11 @@
+----- Part 1 -----
+Sqrt of -1 is = 6.12e-17+1i, which is True
+Sqrt of i is = 0.707+0.707i, which is True
+Exp of i is = 0.54+0.841i, which is True
+Exp of i * pi is = -1+1.22e-16i, which is True
+i to the power of i is = 0.208+0i, which is True
+Log of i is = 0+1.57i, which is True
+Sin of i is = 0+11.5i, which is True
+----- Part 2 -----
+Cosh(i) = 0.54+0i, which is  True
+Cosh(i) = 0+0.841i, which is  True

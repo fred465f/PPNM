@@ -1,7 +1,7 @@
 Out.txt : main.exe
 	mono main.exe > Out.txt
 
-cmath.dll : complex.cs cmath.cs
+cmath.dll : complex.cs cmath.cs main.cs
 	mcs -target:library -out:cmath.dll $^
 
 main.exe : main.cs cmath.dll

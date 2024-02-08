@@ -23,37 +23,14 @@ public static class main {
 		WriteLine($"Sin of i is = {g1}, which is {(approx(g1, new complex(0, Sinh(PI)))).ToString()}");
 
 		// Part 2
+		WriteLine("----- Part 2 -----");
+		WriteLine($"Cosh(i) = {cmath.cosh(I)}, which is  {(approx(cmath.cosh(I), new complex(Cos(1), 0))).ToString()}");
+		WriteLine($"Cosh(i) = {cmath.sinh(I)}, which is  {(approx(cmath.sinh(I), new complex(0, Sin(1)))).ToString()}");
 	}
-	/*
-	public static partial class cmath {
-		public static complex sinh(complex z) {
-			double x=z.Re, y=z.Im;
-			return new complex(Sinh(x)*Cos(y), Cosh(x)*sin(y));
-		}
-		public static double sinh(double x) {return Sinh(x);}
-		public static complex cosh(complex z) {
-			double x=z.Re, y=z-Im;
-			return new complex(Cosh(x)*cos(y), Sinh(x)*sin(y));
-		}
-		public static double cosh(double x) {return Cosh(x);}
-	} */
 	
 	public static bool approx(complex x, complex y, double acc=1e-9, double err=1e-9) {
 		if (!( (Abs(x.Re-y.Re)<acc) || (Abs(x.Re-y.Re)<Max(Abs(x.Re),Abs(y.Re))*err) )) return false;
 		else if (!( (Abs(x.Im-y.Im)<acc) || (Abs(x.Im-y.Im)<Max(Abs(x.Im),Abs(y.Im))*err) )) return false;
 		else return true;
 	}
-}
-
-public static partial class cmath {
-	public static complex sinh(complex z) {
-		double x=z.Re, y=z.Im;
-		return new complex(Sinh(x)*Cos(y), Cosh(x)*sin(y));
-	}
-	public static double sinh(double x) {return Sinh(x);}
-	public static complex cosh(complex z) {
-		double x=z.Re, y=z-Im;
-		return new complex(Cosh(x)*cos(y), Sinh(x)*sin(y));
-	}
-	public static double cosh(double x) {return Cosh(x);}
 }

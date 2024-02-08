@@ -49,4 +49,15 @@ public static void print(this complex z, string s)
 public static void printf(this complex z,string s)
 	{Console.WriteLine(s,z.Re,z.Im);}
 
+// Added hyperbolic functions
+public static complex sinh(complex z) {
+        double x=z.Re, y=z.Im;
+        return new complex(Sinh(x)*Cos(y), Cosh(x)*sin(y));
+}
+public static double sinh(double x) {return Sinh(x);}
+public static complex cosh(complex z) {
+        double x=z.Re, y=z.Im;
+        return new complex(Cosh(x)*cos(y), Sinh(x)*sin(y));
+}
+public static double cosh(double x) {return Cosh(x);}
 }// cmath
