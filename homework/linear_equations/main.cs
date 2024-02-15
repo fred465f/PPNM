@@ -54,5 +54,11 @@ public static class main
 		Matrix halfUnity = unity / 2;
 		halfUnity.PrintMatrix();
 		WriteLine("");
+
+		Matrix antiSymmetric = new Matrix(2, 2);
+		antiSymmetric.DataFromString("1,1\n0,1");
+		antiSymmetric = antiSymmetric.T();
+		antiSymmetric.PrintMatrix();
+		WriteLine("");
 	}
 }

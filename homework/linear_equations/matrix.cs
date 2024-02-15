@@ -28,6 +28,12 @@ public class Matrix
 		set {_data[i + j * _numRows] = value;}
 	}
 
+	public vector this[int i]
+	{
+		get {return (vector) _data[i];}
+		set {_data[i] = (double[]) value;}
+	}
+
 	public int NumRows => _numRows;
 
 	public int NumCols => _numCols;
@@ -160,6 +166,21 @@ public class Matrix
 		}
 	}
 
+	public static Vector operator *(Matrix a, Vector v)
+	{
+		Vector w = new Vector(a.NumRows);
+		for (int i = 0; i < a.NumRows; i++)
+		{
+			double sum = 0;
+			for (int j = 0; j < v.Size; j++)
+			{
+				sum += a[i, j] * v[j];
+			}
+			w[i] = sum;
+		}
+		return w;
+	}
+
 	public static bool Approx(double x, double y, double absoluteError = 1e-9, double relativeError = 1e-9)
 	{
 		if (Abs(x - y) < absoluteError || Abs(x - y) < Max(Abs(x), Abs(y)) * relativeError)
@@ -203,4 +224,52 @@ public class Matrix
 			return a * (1/x);
 		}
 	}
+
+	public Matrix Copy()
+	{
+		Matrix c = new Matrix(this.NumRows, this.NumCols);
+		for (int i = 0; i < this.NumRows; i++)
+		{
+			for (int j = 0; j < this.NumCols; j++)
+			{
+				c[i, j] = this[i, j];
+			}
+		}
+		return c;
+	}
+
+	public static Matrix Identity(int n)
+	{
+		Matrix c = new Matrix(n);
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (i == j)
+				{
+					c[i, j] = 1;
+				}
+				else
+				{
+					c[i, j] = 0;
+				}
+			}
+		}
+		return c;
+	}
+
+	public static Matrix Transpose(Matrix a)
+	{
+		Matrix c = new Matrix(a.NumCols, a.NumRows);
+		for (int i = 0; i < a.NumRows; i++)
+		{
+			for (int j = 0; j < a.NumRows; j++)
+			{
+				c[j, i] = a[i, j];
+			}
+		}
+		return c;
+	}
+
+	public Matrix T() => Transpose(this);
 }
