@@ -159,4 +159,48 @@ public class Matrix
 			return c;
 		}
 	}
+
+	public static bool Approx(double x, double y, double absoluteError = 1e-9, double relativeError = 1e-9)
+	{
+		if (Abs(x - y) < absoluteError || Abs(x - y) < Max(Abs(x), Abs(y)) * relativeError)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public static bool Approx(Matrix a, Matrix b)
+	{
+		if ((a.NumRows != b.NumRows) && (a.NumCols != b.NumCols))
+		{
+			throw new ArgumentException("Input matrices were of different size", $"({a.NumRows}, {a.NumCols}) and ({b.NumRows}, {b.NumCols})");
+		}
+		else
+		{
+			for (int i = 0; i < a.NumRows; i++)
+			{
+				for (int j = 0; j < a.NumCols; j++)
+				{
+					if (!Approx(a[i, j], b[i, j]))
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	public static Matrix operator /(Matrix a, double x)
+	{
+		if (Approx(x, 0.0))
+		{
+			throw new DivideByZeroException();
+		}
+		else
+		{
+			return a * (1/x);
+		}
+	}
 }

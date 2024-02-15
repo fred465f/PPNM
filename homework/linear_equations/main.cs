@@ -6,48 +6,53 @@ public static class main
 {
 	public static void Main()
 	{
-		int Size = 2;
-		Matrix Unity = new Matrix(Size, Size);
-		for (int i = 0; i < Size; i++)
+		int size = 2;
+		Matrix unity = new Matrix(size, size);
+		for (int i = 0; i < size; i++)
 		{
-			for (int j = 0; j < Size; j++)
+			for (int j = 0; j < size; j++)
 			{
 				if (i == j)
 				{
-					Unity[i, j] = 1.0;
+					unity[i, j] = 1.0;
 				}
 				else
 				{
-					Unity[i, j] = 0.0;
+					unity[i, j] = 0.0;
 				}
 			}
 		}
-		Unity.PrintMatrix();
+		unity.PrintMatrix();
         WriteLine("");
 
-        Matrix Hadamard = new Matrix(2, 2);
-		Hadamard.DataFromString("0,1\n1,0");
-		Hadamard.PrintMatrix();
+        Matrix hadamard = new Matrix(2, 2);
+		hadamard.DataFromString("0,1\n1,0");
+		hadamard.PrintMatrix();
 		WriteLine("");
 
-		Matrix Sum = Unity + Hadamard;
-		Sum.PrintMatrix();
+		Matrix sum = unity + hadamard;
+		sum.PrintMatrix();
 		WriteLine("");
 
-		Matrix Diff = Unity - Hadamard;
-		Diff.PrintMatrix();
+		Matrix diff = unity - hadamard;
+		diff.PrintMatrix();
 		WriteLine("");
 
-		Matrix NegUnity = -Unity;
-		NegUnity.PrintMatrix();
+		Matrix negUnity = -unity;
+		negUnity.PrintMatrix();
 		WriteLine("");
 
-		Matrix NegNegUnity = (-1) * NegUnity;
-		NegNegUnity.PrintMatrix();
+		Matrix negNegUnity = (-1) * negUnity;
+		negNegUnity.PrintMatrix();
+		WriteLine($"Claim -(-I) = I: {Matrix.Approx(unity, negNegUnity)}");
 		WriteLine("");
 
-		Matrix HadamardSquared = Hadamard * Hadamard;
-		HadamardSquared.PrintMatrix();
+		Matrix hadamardSquared = hadamard * hadamard;
+		hadamardSquared.PrintMatrix();
+		WriteLine("");
+
+		Matrix halfUnity = unity / 2;
+		halfUnity.PrintMatrix();
 		WriteLine("");
 	}
 }
