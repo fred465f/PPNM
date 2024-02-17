@@ -26,3 +26,11 @@ Claim -(-I) = I: True
 1 0 
 1 1 
 
+0 
+1 
+
+1 
+-1 
+
+Innerproduct 0
+Norm 1
