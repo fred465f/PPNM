@@ -1,1 +1,4 @@
-
+A = QR
+R in QR-decomp. was indeed upper triangular.
+Q in QR-decomp. was indeed orthogonal.
+It is a solution.
