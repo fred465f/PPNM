@@ -16,7 +16,7 @@ Out.txt : main.exe
 
 Out.times.txt : resources.exe
 	>$@
-	for N in $$(seq 100 5 200); do \
+	for N in $$(seq 100 5 300); do \
 		time --format "$$N %e" --output $@ --append \
 		mono $< -size:$$N;\
 	done
