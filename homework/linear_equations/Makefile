@@ -1,9 +1,9 @@
-all: Out.txt Out.times.data
+all: Out.txt Out.times.txt Out.times.gnuplot.svg
 
-Out.times.gnuplot.svg : Out.times.data Makefile
+Out.times.gnuplot.svg : Out.times.txt Makefile
 	echo '\
 			set terminal svg background "white" ;\
-			set out $@ ;\
+			set out "$@" ;\
 			set xlabel "Size of square matrix" ;\
 			set ylabel "QR-decomp. runtime (s)" ;\
 			set grid ;\
@@ -14,7 +14,7 @@ Out.times.gnuplot.svg : Out.times.data Makefile
 Out.txt : main.exe
 	mono $< > $@
 
-Out.times.data : resources.exe
+Out.times.txt : resources.exe
 	>$@
 	for N in $$(seq 100 20 200); do \
 		time --format "$$N %e" --output $@ --append \
@@ -37,4 +37,4 @@ qrgs.dll : qrgs.cs matrix.dll vector.dll
 	mcs -target:library -reference:matrix.dll -reference:vector.dll -out:$@ $<
 
 clean :
-	$(RM) *.exe Out.* *.dll
+	$(RM) *.exe Out.* *.dll *.svg
