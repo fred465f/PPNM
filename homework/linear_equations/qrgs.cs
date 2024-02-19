@@ -14,6 +14,9 @@ namespace LinearAlgebra
     {
         // Fields
         public Matrix Q, R; 
+        public bool isSquare;
+        public int inputNumRows;
+        public int inputNumCols;
 
         /* Constructor - it computes QR-decomp. of input matrix doing
         creation of new instance of QRGS. */
@@ -37,6 +40,16 @@ namespace LinearAlgebra
                         Q[j] -= Q[i] * R[i, j];
                     }
                 }
+                if (a.NumRows == a.NumCols)
+                {
+                    isSquare = true;
+                }
+                else
+                {
+                    isSquare = false;
+                }
+                inputNumRows = a.NumRows;
+                inputNumCols = a.NumCols;
             }
         }
 
@@ -61,24 +74,57 @@ namespace LinearAlgebra
         diagonal entries of R. Throws an exception if A is not a square matrix. */
         public double Determinant()
         {
-            double determinant = 1;
-            for (int i = 0; i < R.NumRows; i++)
+            if (!isSquare)
             {
-                for (int j = 0; j < R.NumCols; j++)
+                throw new ArgumentException("The determinant is only defined for square matrices", $"({inputNumRows}, {inputNumCols})");
+            }
+            else
+            {
+                double determinant = 1;
+                for (int i = 0; i < R.NumRows; i++)
                 {
-                    if (i == j)
+                    for (int j = 0; j < R.NumCols; j++)
                     {
-                        determinant *= R[i, j];
+                        if (i == j)
+                        {
+                            determinant *= R[i, j];
+                        }
                     }
                 }
+                return determinant;
             }
-            return determinant;
         }
 
         // Method computes inverse of A. Throws an exception if det(A) = 0.
         public Matrix Inverse()
         {
-            return this.Q;
+            double determinant = this.Determinant();
+            if (!isSquare || Matrix.Approx(determinant, 0))
+            {
+                throw new ArgumentException("To be invertible a matrix must both be a square matrix and have non-trivial determinant", $"Square = {isSquare}, Determinant = {determinant}");
+            }
+            else
+            {
+                Matrix B = new Matrix(inputNumRows, inputNumCols);
+                for (int i = 0; i < inputNumCols; i++)
+                {
+                    Vector ei = new Vector(inputNumRows);
+                    for (int j = 0; j < inputNumRows; j++)
+                    {
+                        if (i == j)
+                        {
+                            ei[j] = 1.0;
+                        }
+                        else
+                        {
+                            ei[j] = 0.0;
+                        }
+                    }
+                    Vector bi = SolveLinearEq(ei);
+                    B[i] = bi;
+                }
+                return B;
+            }
         }
     }
 }

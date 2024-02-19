@@ -9,21 +9,37 @@ class Program
 {
 	static void Main()
 	{
-		// To generate pseudo-random numbers.
-		var rnd = new Random(10);
+		WriteLine("----- Check QR-decomp. -----\n");
+		CheckQRDecomp(100, 80);
 
-		// Check that QR-decomp. works for random tall (m, n) matrix.
-		int m = 200, n = 150;
-		Matrix a = new Matrix(m, n);
-		for (int i = 0; i < m; i++)
+		WriteLine("\n\n----- Check linear eq. solver -----\n");
+		CheckQRLinearEqSolver(100);
+
+		WriteLine("\n\n----- Check inverse solver -----\n");
+		CheckQRInverse(100);
+	}
+
+	// Method to check whether QR-decomp works for random modest size tall matrix.
+	public static void CheckQRDecomp(int numRows, int numCols)
+	{
+		// To generate pseudo-random numbers.
+		var rnd = new Random(1);
+
+		// Generate random tall matrix of given input size.
+		Matrix a = new Matrix(numRows, numCols);
+		for (int i = 0; i < numRows; i++)
 		{
-			for (int j = 0; j < n; j++)
+			for (int j = 0; j < numCols; j++)
 			{
 				a[i, j] = rnd.NextDouble();
 			}
 		}
-		QRGS aDecomp = new QRGS(a);
-		if (Matrix.Approx(a, aDecomp.Q * aDecomp.R))
+
+		// Create instance of QR-decomp class.
+		QRGS qrgs = new QRGS(a);
+
+		// Make output.
+		if (Matrix.Approx(a, qrgs.Q * qrgs.R))
 		{
 			WriteLine("A = QR");
 		}
@@ -31,7 +47,7 @@ class Program
 		{
 			WriteLine("A != QR");
 		}
-		if (CheckUpperTriangular(aDecomp.R))
+		if (CheckUpperTriangular(qrgs.R))
 		{
 			WriteLine("R in QR-decomp. was indeed upper triangular.");
 		}
@@ -39,7 +55,7 @@ class Program
 		{
 			WriteLine("R in QR-decomp. was not upper triangular.");
 		}
-		if (CheckOrthogonal(aDecomp.Q))
+		if (CheckOrthogonal(qrgs.Q))
 		{
 			WriteLine("Q in QR-decomp. was indeed orthogonal.");
 		}
@@ -47,27 +63,75 @@ class Program
 		{
 			WriteLine("Q in QR-decomp. was not orthogonal.");
 		}
+	}
 
-		// Solve A * x = b using QR-decomp. A = Q * R for square matrix.
-		a = new Matrix(m);
-		Vector b = new Vector(m);
+	// Method to check whether QR-decomp. class solves linear eq. correctly.
+	public static void CheckQRLinearEqSolver(int m)
+	{
+		// To generate pseudo-random numbers.
+		var rnd = new Random(1);
+
+		// Generate random square matrix and vector.
+		Matrix a = new Matrix(m);
+		Vector v = new Vector(m);
 		for (int i = 0; i < m; i++)
 		{
 			for (int j = 0; j < m; j++)
 			{
 				a[i, j] = rnd.NextDouble();
 			}
-			b[i] = rnd.NextDouble();
+			v[i] = rnd.NextDouble();
 		}
-		aDecomp = new QRGS(a);
-		Vector x = aDecomp.SolveLinearEq(b);
-		if (Vector.Approx(a * x, b))
+
+		// Create instance of QR-decomp. class.
+		QRGS qrgs = new QRGS(a);
+
+		// Solve linear eq.
+		Vector x = qrgs.SolveLinearEq(v);
+		Write("A possible solution to Ax = b was found. ");
+
+		// Make output.
+		if (Vector.Approx(a * x, v))
 		{
-			WriteLine("It is a solution.");
+			WriteLine("Result was indeed a solution to linear eq.");
 		}
 		else
 		{
-			WriteLine("It is not a solution.");
+			WriteLine("Result was not a solution to linear eq.");
+		}
+	}
+	
+	// Method to check whether QR-decomp. class computes inverse of random modest size square matrix correctly.
+	public static void CheckQRInverse(int m)
+	{
+		// To generate pseudo-random numbers.
+		var rnd = new Random(1);
+
+		// Generate random square matrix.
+		Matrix a = new Matrix(m);
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				a[i, j] = rnd.NextDouble();
+			}
+		}
+
+		// Create instance of QR-decomp. class.
+		QRGS qrgs = new QRGS(a);
+
+		// Compute inverse.
+		Matrix b = qrgs.Inverse();
+		Write("Possible inverse of matrix were found. ");
+
+		// Make output.
+		if (Matrix.Approx(a * b, Matrix.Identity(m)))
+		{
+			WriteLine("Result was indeed the inverse.");
+		}
+		else
+		{
+			WriteLine("Result was not the inverse.");
 		}
 	}
 

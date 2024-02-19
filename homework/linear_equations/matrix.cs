@@ -13,8 +13,8 @@ namespace LinearAlgebra
 	public class Matrix
 	{
 		// Fields.
-		protected double[] _data;
-		protected readonly int _numRows, _numCols;
+		private double[] _data;
+		private readonly int _numRows, _numCols;
 
 		// Constructors.
 		public Matrix(int m, int n)

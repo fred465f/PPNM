@@ -1,4 +1,15 @@
+----- Check QR-decomp. -----
+
 A = QR
 R in QR-decomp. was indeed upper triangular.
 Q in QR-decomp. was indeed orthogonal.
-It is a solution.
+
+
+----- Check linear eq. solver -----
+
+A possible solution to Ax = b was found. Result was indeed a solution to linear eq.
+
+
+----- Check inverse solver -----
+
+Possible inverse of matrix were found. Result was indeed the inverse.
