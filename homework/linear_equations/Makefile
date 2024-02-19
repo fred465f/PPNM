@@ -16,9 +16,9 @@ Out.txt : main.exe
 
 Out.times.txt : resources.exe
 	>$@
-	for N in $$(seq 100 20 200); do \
+	for N in $$(seq 100 5 200); do \
 		time --format "$$N %e" --output $@ --append \
-		mono $< -size:$$N > $@;\
+		mono $< -size:$$N >> $@;\
 	done
 
 main.exe : main.cs vector.dll matrix.dll qrgs.dll
