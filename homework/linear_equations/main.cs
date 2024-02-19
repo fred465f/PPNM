@@ -7,7 +7,7 @@ using static System.Math;
 
 class Program
 {
-	static void Main()
+	static void Main(string[] args)
 	{
 		WriteLine("----- Check QR-decomp. -----\n");
 		CheckQRDecomp(100, 80);
@@ -17,6 +17,36 @@ class Program
 
 		WriteLine("\n\n----- Check inverse solver -----\n");
 		CheckQRInverse(100);
+
+		// If arguments are given, do QR-decomp. on matrices of input size.
+		if (args.Length != 0)
+		{
+			foreach (var arg in args)
+			{
+				int m = int.Parse(arg);
+				DoQRDecomp(m);
+			}
+		}
+	}
+
+	// Method to do QR-decomp on random input size matrix.
+	public static void DoQRDecomp(int m)
+	{
+		// To generate pseudo-random numbers.
+		var rnd = new Random(1);
+
+		// Generate random tall matrix of given input size.
+		Matrix a = new Matrix(m);
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				a[i, j] = rnd.NextDouble();
+			}
+		}
+
+		// Create instance of QR-decomp class.
+		QRGS qrgs = new QRGS(a);
 	}
 
 	// Method to check whether QR-decomp works for random modest size tall matrix.

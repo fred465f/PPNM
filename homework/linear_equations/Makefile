@@ -1,7 +1,30 @@
+all: Out.txt Out.times.data
+
+Out.times.gnuplot.svg : Out.times.data Makefile
+	echo '\
+			set terminal svg background "white" ;\
+			set out $@ ;\
+			set xlabel "Size of square matrix" ;\
+			set ylabel "QR-decomp. runtime (s)" ;\
+			set grid ;\
+			set title "QR-decomp. runtime vs. square matrix size" ;\
+			plot "$<" with lines notitle ;\
+		' | gnuplot
+
 Out.txt : main.exe
 	mono $< > $@
 
+Out.times.data : resources.exe
+	>$@
+	for N in $$(seq 100 20 200); do \
+		time --format "$$N %e" --output $@ --append \
+		mono $< -size:$$N > $@;\
+	done
+
 main.exe : main.cs vector.dll matrix.dll qrgs.dll
+	mcs -target:exe -out:$@ -reference:vector.dll -reference:matrix.dll -reference:qrgs.dll $<
+
+resources.exe : resources.cs vector.dll matrix.dll qrgs.dll
 	mcs -target:exe -out:$@ -reference:vector.dll -reference:matrix.dll -reference:qrgs.dll $<
 
 matrix.dll : matrix.cs vector.dll
@@ -14,4 +37,4 @@ qrgs.dll : qrgs.cs matrix.dll vector.dll
 	mcs -target:library -reference:matrix.dll -reference:vector.dll -out:$@ $<
 
 clean :
-	$(RM) main.exe Out.txt matrix.dll vector.dll qrgs.dll
+	$(RM) *.exe Out.* *.dll
