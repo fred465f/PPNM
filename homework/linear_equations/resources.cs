@@ -12,7 +12,7 @@ class Program
 		foreach (var arg in args)
 		{
             var words = arg.Split(":");
-            if (words[0] == "size")
+            if (words[0] == "-size")
             {
 			    int m = int.Parse(words[1]);
 			    DoQRDecomp(m);
