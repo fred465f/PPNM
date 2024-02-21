@@ -1,8 +1,8 @@
-all: Out.txt Out.times.txt Out.times.gnuplot.svg
+all: Out.txt Out.times.txt Out.times.gnuplot.png
 
-Out.times.gnuplot.svg : Out.times.txt Makefile
+Out.times.gnuplot.png : Out.times.txt Makefile
 	echo '\
-			set terminal svg background "white" ;\
+			set terminal png background "white" ;\
 			set out "$@" ;\
 			set xlabel "Size of square matrix" ;\
 			set ylabel "QR-decomp. runtime (s)" ;\
@@ -16,7 +16,7 @@ Out.txt : main.exe
 
 Out.times.txt : resources.exe
 	>$@
-	for N in $$(seq 100 5 300); do \
+	for N in $$(seq 100 5 500); do \
 		time --format "$$N %e" --output $@ --append \
 		mono $< -size:$$N;\
 	done
