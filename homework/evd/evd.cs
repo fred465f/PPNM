@@ -12,50 +12,54 @@ namespace LinearAlgebra
     public class EVD
     {
         // ----- Fields -----
-
         public Vector w;
         public Matrix V;
+        double absoluteError = 1e-12, relativeError = 1e-12;
 
         // ----- Constructor -----
-
         public EVD(Matrix M)
         {
-            Matrix A = M.Copy();
-            V = Matrix.Identity(M.NumRows);
-            w = new Vector(M.NumRows);
-            // Run Jacobi rotations on A and update V.
-            // Copy diagonal elements into w.
-            bool changed;
-            do 
+            if (M.NumRows != M.NumCols || !Matrix.Approx(M, M.T()))
             {
-                changed = false;
-                for (int p = 0; p < A.NumRows - 1; p++)
+                throw new ArgumentException("Input matrix should both be square and symmetric for Jacobi eigenvalue algorithm to work");
+            }
+            {
+                Matrix A = M.Copy();
+                V = Matrix.Identity(M.NumRows);
+                w = new Vector(M.NumRows);
+                // Run Jacobi rotations on A and update V.
+                // Copy diagonal elements into w.
+                bool changed;
+                do 
                 {
-                    for (int q = p + 1; q < A.NumRows; q++)
+                    changed = false;
+                    for (int p = 0; p < A.NumRows - 1; p++)
                     {
-                        double Apq = A[p, q], App = A[p, p], Aqq = A[q, q];
-                        double theta = 0.5 * Atan2(2 * Apq, Aqq - App);
-                        double s = Sin(theta), c = Cos(theta);
-                        double updatedApp = c * c * App - 2 * s * c * Apq + s * s * Aqq;
-                        double updatedAqq = s * s * App + 2 * s * c * Apq + c * c * Aqq;
-                        if (Matrix.Approx(updatedApp, App) || Matrix.Approx(updatedAqq, Aqq))
+                        for (int q = p + 1; q < A.NumRows; q++)
                         {
-                            changed = true;
-                            TimesJ(A, p, q, theta);
-                            JTimes(A, p, q, -theta);
-                            TimesJ(V, p, q, theta);
+                            double Apq = A[p, q], App = A[p, p], Aqq = A[q, q];
+                            double theta = 0.5 * Atan2(2 * Apq, Aqq - App);
+                            double s = Sin(theta), c = Cos(theta);
+                            double updatedApp = c * c * App - 2 * s * c * Apq + s * s * Aqq;
+                            double updatedAqq = s * s * App + 2 * s * c * Apq + c * c * Aqq;
+                            if (updatedApp != App || updatedAqq != Aqq)
+                            {
+                                changed = true;
+                                TimesJ(A, p, q, theta);
+                                JTimes(A, p, q, -theta);
+                                TimesJ(V, p, q, theta);
+                            }
                         }
                     }
                     for (int i = 0; i < A.NumRows; i++)
                     {
                         w[i] = A[i, i];
                     }
-                }
-            } while (changed);
+                } while (changed);
+            }
         }
 
         // ----- Jacobi rotation methods -----
-
         public static void TimesJ(Matrix A, int p, int q, double theta) 
         {
             double s = Sin(theta), c = Cos(theta);
@@ -66,7 +70,6 @@ namespace LinearAlgebra
                 A[i, q] = s * Aip + c * Aiq;
             }
         }
-
         public static void JTimes(Matrix A, int p, int q, double theta) 
         {
             double s = Sin(theta), c = Cos(theta);
@@ -77,6 +80,5 @@ namespace LinearAlgebra
                 A[q, i] = -s * Api + c * Aqi;
             }
         }
-
     }
 }

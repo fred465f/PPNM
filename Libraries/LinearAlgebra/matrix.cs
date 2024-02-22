@@ -109,7 +109,7 @@ namespace LinearAlgebra
 				return false;
 			}
 		}
-		public static bool Approx(Matrix A, Matrix B)
+		public static bool Approx(Matrix A, Matrix B, double absoluteError = 1e-9, double relativeError = 1e-9)
 		{
 			if ((A.NumRows != B.NumRows) && (A.NumCols != B.NumCols))
 			{
@@ -121,7 +121,7 @@ namespace LinearAlgebra
 				{
 					for (int j = 0; j < A.NumCols; j++)
 					{
-						if (!Approx(A[i, j], B[i, j]))
+						if (!Approx(A[i, j], B[i, j], absoluteError, relativeError))
 							return false;
 					}
 				}
@@ -336,6 +336,45 @@ namespace LinearAlgebra
 				for (int j = 0; j < n; j++)
 				{
 					C[i, j] = 0;
+				}
+			}
+			return C;
+		}
+
+		// Method returning diagonal elements of square matrix as vector.
+		public Vector Diag()
+		{
+			if (this.NumRows != this.NumCols)
+			{
+				throw new ArgumentException("To retrieve diagonal elements matrix must be a square matrix", $"({this.NumRows}, {this.NumCols})");
+			}
+			else
+			{
+				Vector u = new Vector(this.NumRows);
+				for (int i = 0; i < this.NumRows; i++)
+				{
+					u[i] = this[i, i];
+				}
+				return u;
+			}
+		}
+
+		// Static method constructing diagonal matrix from vector.
+		public static Matrix Diag(Vector v)
+		{
+			Matrix C = new Matrix(v.Length);
+			for (int i = 0; i < v.Length; i++)
+			{
+				for (int j = 0; j < v.Length; j++)
+				{
+					if (i == j)
+					{
+						C[i, i] = v[i];
+					}
+					else
+					{
+						C[i, j] = 0;
+					}
 				}
 			}
 			return C;
