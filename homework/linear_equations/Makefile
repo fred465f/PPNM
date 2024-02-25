@@ -1,4 +1,4 @@
-all: Out.txt Out.times.txt Out.times.gnuplot.png
+all: Out.txt Out.times.gnuplot.png
 
 Out.times.gnuplot.png : Out.times.txt Makefile
 	echo '\

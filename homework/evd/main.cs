@@ -17,14 +17,14 @@ class Program
             // Variables.
             double absoluteError = 1e-6, relativeError = 1e-6;
             int n = 100;
-            double rMax = 10, rDelta = 0.3; // Default values if none were provided from command line. 
-            string outfile;
+            double rMax = 10, rDelta = 0.05; // Default values if none were provided from command line. 
+            string outFile = "";
 
-            // Process commandline input arguments.
+            // Process command line input arguments.
             foreach (var arg in args)
             {
                 var words = arg.Split(":");
-                if (words[0] == "-rmax")
+                if (words[0] == "-rMax")
                 {
                     rMax = double.Parse(words[1]);
                 }
@@ -32,9 +32,9 @@ class Program
                 {
                     rDelta = double.Parse(words[1]);
                 }
-                else if (words[0] == "-outfile")
+                else if (words[0] == "-outFile")
                 {
-                    outfile = words[1];
+                    outFile = words[1];
                 }
             }
 
@@ -43,13 +43,33 @@ class Program
             CheckEVD(n, absoluteError, relativeError);
             WriteLine("");
             
-            // Solve s-wave radial Schrödinger eq. for Hydrogen atom.
+            /* Solve s-wave radial Schrödinger eq. for Hydrogen atom using manually chosen 
+            parameters of r_max and dr for which it seemed that the ground state energy converged. 
+            This is checked using convergence plots named:
+            Out.drConvergence.gnuplot.png and Out.rMaxConvergence.gnuplot.png. */
             WriteLine("----- Part B -----");
             (Vector w, Matrix V) = SolveRadialEq(rMax, rDelta);
-            WriteLine("S-wave radial Schrödinger eq. for the Hydrogen atom succesfully solved numerically using EVD class.");
+            WriteLine("S-wave radial Schrödinger eq. for the Hydrogen atom successfully solved numerically using EVD class.");
 
-            // Check convergence of groundstate energy with respect to r_max and r_delta.
-            
+            /* Save wave-functions corresponding to lowest lying eigenvalues for later plotting. 
+            Each column in data file, corresponds the k'th wave vector ordered from left to right. */
+            using (var outStream = new System.IO.StreamWriter(outFile, append:false))
+            {   
+                Vector firstWaveVector = V[0] / Sqrt(rDelta);
+                Vector secondWaveVector = V[1] / Sqrt(rDelta);
+                Vector thirdWaveVector = V[2] / Sqrt(rDelta);
+                int nPoints = (int) (rMax / rDelta) - 1;
+                Vector r = new Vector(nPoints);
+                for (int i = 0; i < nPoints; i++)
+                {
+                    r[i] = rDelta * (i + 1);
+                }
+                for (int i = 0; i < w.Length; i++)
+                {
+                    outStream.WriteLine($"{r[i]} {firstWaveVector[i]} {secondWaveVector[i]} {thirdWaveVector[i]}");
+                }
+            }
+            WriteLine($"Saved wave vectors corresponding to radial wave numbers 1, 2 and 3 for s-waves in {outFile}.");
         }
 
         // Static method to check functionality of EVD class.
@@ -71,7 +91,7 @@ class Program
             // Create instance of EVD class. Eigenvalue-decomposition occurs doing construction of instance.
             EVD evd = new EVD(M);
 
-            // Compute relavant matrices for functionality checks.
+            // Compute relevant matrices for functionality checks.
             Matrix D = Matrix.Diag(evd.w);
             Matrix I = Matrix.Identity(D.NumRows);
             

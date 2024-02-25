@@ -4,4 +4,5 @@ V * D * V^T = M
 V^T * V = V * V^T = I
 
 ----- Part B -----
-S-wave radial Schrödinger eq. for the Hydrogen atom succesfully solved numerically using EVD class.
+S-wave radial Schrödinger eq. for the Hydrogen atom successfully solved numerically using EVD class.
+Saved wave vectors corresponding to radial wave numbers 1, 2 and 3 for s-waves in Out.waveVectorsData.txt.
