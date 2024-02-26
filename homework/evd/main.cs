@@ -18,7 +18,7 @@ class Program
             double absoluteError = 1e-6, relativeError = 1e-6;
             int n = 100;
             double rMax = 10, rDelta = 0.05; // Default values if none were provided from command line. 
-            string outFile = "";
+            string[] outFiles = new string[2];
 
             // Process command line input arguments.
             foreach (var arg in args)
@@ -34,7 +34,9 @@ class Program
                 }
                 else if (words[0] == "-outFile")
                 {
-                    outFile = words[1];
+                    string[] files = words[1].Split(",");
+                    outFiles[0] = files[0];
+                    outFiles[1] = files[1];
                 }
             }
 
@@ -51,25 +53,36 @@ class Program
             (Vector w, Matrix V) = SolveRadialEq(rMax, rDelta);
             WriteLine("S-wave radial Schrödinger eq. for the Hydrogen atom successfully solved numerically using EVD class.");
 
-            /* Save wave-functions corresponding to lowest lying eigenvalues for later plotting. 
+            /* Save numerical wave-functions corresponding to lowest lying eigenvalues for later plotting. 
             Each column in data file, corresponds the k'th wave vector ordered from left to right. */
-            using (var outStream = new System.IO.StreamWriter(outFile, append:false))
+            Vector firstWaveVector = V[0] / Sqrt(rDelta);
+            Vector secondWaveVector = - V[1] / Sqrt(rDelta);
+            int nPoints = (int) (rMax / rDelta) - 1;
+            Vector r = new Vector(nPoints);
+            for (int i = 0; i < nPoints; i++)
+            {
+                r[i] = rDelta * (i + 1);
+            }
+            using (var outStream = new System.IO.StreamWriter(outFiles[0], append:false))
             {   
-                Vector firstWaveVector = V[0] / Sqrt(rDelta);
-                Vector secondWaveVector = V[1] / Sqrt(rDelta);
-                Vector thirdWaveVector = V[2] / Sqrt(rDelta);
-                int nPoints = (int) (rMax / rDelta) - 1;
-                Vector r = new Vector(nPoints);
-                for (int i = 0; i < nPoints; i++)
-                {
-                    r[i] = rDelta * (i + 1);
-                }
                 for (int i = 0; i < w.Length; i++)
                 {
-                    outStream.WriteLine($"{r[i]} {firstWaveVector[i]} {secondWaveVector[i]} {thirdWaveVector[i]}");
+                    outStream.WriteLine($"{r[i]} {firstWaveVector[i]} {secondWaveVector[i]}");
                 }
             }
-            WriteLine($"Saved wave vectors corresponding to radial wave numbers 1, 2 and 3 for s-waves in {outFile}.");
+            WriteLine($"Saved wave vectors corresponding to radial wave numbers 1 and 2 for s-waves in {outFiles[0]}.");
+
+            /* Save analytical wave-functions corresponding to lowest lying eigenvalues for later plotting. 
+            Each column in data file, corresponds the k'th wave vector ordered from left to right. */
+            using (var outStream = new System.IO.StreamWriter(outFiles[1], append:false))
+            {   
+                for (int i = 0; i < w.Length; i++)
+                {
+                    double x = r[i];
+                    outStream.WriteLine($"{r[i]} {2 * x * Exp(-x)} {(1/Sqrt(2)) * x * (1 - x/2) * Exp(-x/2)}");
+                }
+            }
+            WriteLine($"Saved wave vectors corresponding to radial wave numbers 1 and 2 for s-waves in {outFiles[1]}.");
         }
 
         // Static method to check functionality of EVD class.

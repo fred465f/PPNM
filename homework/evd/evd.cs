@@ -42,7 +42,7 @@ namespace LinearAlgebra
                             double s = Sin(theta), c = Cos(theta);
                             double updatedApp = c * c * App - 2 * s * c * Apq + s * s * Aqq;
                             double updatedAqq = s * s * App + 2 * s * c * Apq + c * c * Aqq;
-                            if (updatedApp != App || updatedAqq != Aqq)
+                            if (!Matrix.Approx(updatedApp, App, absoluteError=1e-15, relativeError=1e-15) || !Matrix.Approx(updatedAqq, Aqq, absoluteError=1e-15, relativeError=1e-15))
                             {
                                 changed = true;
                                 TimesJ(A, p, q, theta);
