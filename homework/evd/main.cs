@@ -56,7 +56,7 @@ class Program
             /* Save numerical wave-functions corresponding to lowest lying eigenvalues for later plotting. 
             Each column in data file, corresponds the k'th wave vector ordered from left to right. */
             Vector firstWaveVector = V[0] / Sqrt(rDelta);
-            Vector secondWaveVector = - V[1] / Sqrt(rDelta);
+            Vector secondWaveVector = V[1] / Sqrt(rDelta);
             int nPoints = (int) (rMax / rDelta) - 1;
             Vector r = new Vector(nPoints);
             for (int i = 0; i < nPoints; i++)

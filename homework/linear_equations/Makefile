@@ -1,6 +1,6 @@
 all: Out.txt Out.times.gnuplot.png
 
-Out.times.gnuplot.png : Out.times.txt Makefile
+Out.times.gnuplot.png : Out.times.txt
 	echo '\
 			set terminal png background "white" ;\
 			set out "$@" ;\

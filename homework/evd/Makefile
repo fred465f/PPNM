@@ -1,4 +1,4 @@
-all : Out.txt Out.rMaxConvergence.gnuplot.png Out.drConvergence.gnuplot.png Out.waveVectors.gnuplot.png
+all : Out.txt Out.rMaxConvergence.gnuplot.png Out.drConvergence.gnuplot.png Out.waveVectors.gnuplot.png Out.resources.gnuplot.png 
 
 # Used linearalgebra libraries.
 LIBSPATH = ../../Libraries/LinearAlgebra/
@@ -54,8 +54,18 @@ Out.waveVectors.gnuplot.png :
 			;\
 			unset multiplot ;\
 		' | gnuplot
+Out.resources.gnuplot.png : Out.resourcesData.txt
+	echo '\
+			set terminal png background "white" ;\
+			set out "$@" ;\
+			set xlabel "Size of square matrix" ;\
+			set ylabel "Diagonalization. runtime (s)" ;\
+			set grid ;\
+			set title "Diagonalization runtime vs. square matrix size" ;\
+			plot "$<" with lines lw 3 linecolor rgb "#F05D5A" notitle ;\
+		' | gnuplot
 
-# Rules to make data input to rules making image files.
+# Rules to make data input to rules making image files for examining groundstate energy convergence.
 Out.rMaxConvergenceData.txt : convergence.exe
 	> $@
 	for rMax in $$(seq 3 0.35 10); do \
@@ -67,7 +77,15 @@ Out.drConvergenceData.txt : convergence.exe
 		mono $< -rMax:14 -dr:$$dr -test:dr >> $@; \
 	done
 
-# Rule to make main commandline output file.
+# Rule to make data examining resources using diagonalization proceedure.
+Out.resourcesData.txt : resources.exe
+	>$@
+	for N in $$(seq 100 5 300); do \
+		time --format "$$N %e" --output $@ --append \
+		mono $< -size:$$N;\
+	done
+
+# Rule to make main commandline output file (as well as wavevector data).
 Out.txt : main.exe
 	mono $< -rMax:14 -dr:0.05 -outFile:Out.numericalWaveVectorsData.txt,Out.analyticalWaveVectorsData.txt > $@
 
@@ -75,6 +93,8 @@ Out.txt : main.exe
 main.exe : main.cs evd.dll matrix.dll
 	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
 convergence.exe : convergence.cs evd.dll matrix.dll
+	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
+resources.exe : resources.cs evd.dll matrix.dll
 	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
 
 # Rules to make libraries.

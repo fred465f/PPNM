@@ -13,28 +13,24 @@ class Program
         static void Main(string[] args)
         {
             // Variables.
-            double absoluteError = 1e-6, relativeError = 1e-6;
-            string outFile;
+            int size = 100;
 
             // Process command line input arguments.
             foreach (var arg in args)
             {
                 var words = arg.Split(":");
-                if (words[0] == "-outFile")
+                if (words[0] == "-size")
                 {
-                    outFile = words[1];
+                    size = int.Parse(words[1]);
                 }
             }
 
             // Diagonalize random symmetric (n, n) matrix.
-            for (int n = 100; n < 300; n += 5)
-            {
-                // Diagonalize random symmetric (n, n) matrix ...
-            }
+            DiagonalizeRandomMatrix(size);
         }
 
         // Static method to check diagonalize random symmetric (n, n) matrix.
-        static void CheckEVD(int n, double absoluteError, double relativeError)
+        static void DiagonalizeRandomMatrix(int n)
         {
             // Create random symmetric square matrix of size (n, n).
             var rnd = new System.Random(1);

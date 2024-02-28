@@ -14,7 +14,7 @@ namespace LinearAlgebra
         // ----- Fields -----
         public Vector w;
         public Matrix V;
-        double absoluteError = 1e-12, relativeError = 1e-12;
+        public double absoluteError = 1e-12, relativeError = 1e-12;
 
         // ----- Constructor -----
         public EVD(Matrix M)
@@ -42,7 +42,7 @@ namespace LinearAlgebra
                             double s = Sin(theta), c = Cos(theta);
                             double updatedApp = c * c * App - 2 * s * c * Apq + s * s * Aqq;
                             double updatedAqq = s * s * App + 2 * s * c * Apq + c * c * Aqq;
-                            if (!Matrix.Approx(updatedApp, App, absoluteError=1e-15, relativeError=1e-15) || !Matrix.Approx(updatedAqq, Aqq, absoluteError=1e-15, relativeError=1e-15))
+                            if (!Matrix.Approx(updatedApp, App, absoluteError, relativeError) || !Matrix.Approx(updatedAqq, Aqq, absoluteError, relativeError))
                             {
                                 changed = true;
                                 TimesJ(A, p, q, theta);

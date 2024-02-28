@@ -1,6 +1,4 @@
 ----- Part A -----
-V^T * M * V = D
-V * D * V^T = M
 V^T * V = V * V^T = I
 
 ----- Part B -----
