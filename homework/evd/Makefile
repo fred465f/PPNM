@@ -1,9 +1,9 @@
 all : Out.txt Out.rMaxConvergence.gnuplot.png Out.drConvergence.gnuplot.png Out.waveVectors.gnuplot.png Out.resources.gnuplot.png 
 
-# Used linearalgebra libraries.
+# Path to linearalgebra library.
 LIBSPATH = ../../Libraries/LinearAlgebra/
 
-# Rules to make image files.
+# Image files.
 Out.rMaxConvergence.gnuplot.png : Out.rMaxConvergenceData.txt
 	echo '\
 			set terminal png background "white" ;\
@@ -24,7 +24,7 @@ Out.drConvergence.gnuplot.png : Out.drConvergenceData.txt
 			set title "Convergence of GS-energy for varying dr" ;\
 			plot "$<" with lines lw 3 linecolor rgb "#FC695E" notitle ;\
 		' | gnuplot	
-Out.waveVectors.gnuplot.png : 
+Out.waveVectors.gnuplot.png : Out.numericalWaveFunctionsData.txt Out.analyticalWaveFunctionsData.txt
 	echo '\
 			set terminal png background "white" size "700, 1000" ;\
 			set out "$@" ;\
@@ -39,8 +39,8 @@ Out.waveVectors.gnuplot.png :
 			set ytics 0.1, 0.2, 0.9 ;\
 			set ylabel "Prob. amp." ;\
 			set title "S-wave radial wave-functions with quantum numbers k" ;\
-			plot "Out.numericalWaveVectorsData.txt" using 1:2 with lines lw 3 linecolor rgb "#F05D5A" title "Numerical (k = 1)", \
-					"Out.analyticalWaveVectorsData.txt" using 1:2 with lines lw 3 lt 0 linecolor rgb "#3F9EEB" title "Analytical (k = 1)" ;\
+			plot "Out.numericalWaveFunctionsData.txt" using 1:2 with lines lw 3 linecolor rgb "#F05D5A" title "Numerical (k = 1)", \
+					"Out.analyticalWaveFunctionsData.txt" using 1:2 with lines lw 3 lt 0 linecolor rgb "#3F9EEB" title "Analytical (k = 1)" ;\
 			;\
 			unset title ;\
 			set size 1, 0.52 ;\
@@ -49,8 +49,8 @@ Out.waveVectors.gnuplot.png :
 			set ytics -0.5, 0.2, 0.3 ;\
 			set xlabel "r (in units of Bohr radius)" ;\
 			set ylabel "Prob. amp." ;\
-			plot "Out.numericalWaveVectorsData.txt" using 1:3 with lines lw 3 linecolor rgb "#F05D5A" title "Numerical (k = 2)", \
-					"Out.analyticalWaveVectorsData.txt" using 1:3 with lines lw 3 lt 0 linecolor rgb "#3F9EEB" title "Analytical (k = 2)" ;\
+			plot "Out.numericalWaveFunctionsData.txt" using 1:3 with lines lw 3 linecolor rgb "#F05D5A" title "Numerical (k = 2)", \
+					"Out.analyticalWaveFunctionsData.txt" using 1:3 with lines lw 3 lt 0 linecolor rgb "#3F9EEB" title "Analytical (k = 2)" ;\
 			;\
 			unset multiplot ;\
 		' | gnuplot
@@ -62,10 +62,14 @@ Out.resources.gnuplot.png : Out.resourcesData.txt
 			set ylabel "Diagonalization. runtime (s)" ;\
 			set grid ;\
 			set title "Diagonalization runtime vs. square matrix size" ;\
-			plot "$<" with lines lw 3 linecolor rgb "#F05D5A" notitle ;\
+			f(x) = b + (x/a)**c ;\
+			b = 1; a = 90; c = 3 ;\
+			fit f(x) "$<" via a, b ;\
+			plot "$<" with lines lw 3 linecolor rgb "#F05D5A" title "Data", \
+					f(x) with lines lw 3 linecolor rgb "#3F9EEB" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
 		' | gnuplot
 
-# Rules to make data input to rules making image files for examining groundstate energy convergence.
+# Data.
 Out.rMaxConvergenceData.txt : convergence.exe
 	> $@
 	for rMax in $$(seq 3 0.35 10); do \
@@ -76,14 +80,16 @@ Out.drConvergenceData.txt : convergence.exe
 	for dr in $$(seq 0.05 0.05 0.5); do \
 		mono $< -rMax:14 -dr:$$dr -test:dr >> $@; \
 	done
-
-# Rule to make data examining resources using diagonalization proceedure.
 Out.resourcesData.txt : resources.exe
 	>$@
 	for N in $$(seq 100 5 300); do \
 		time --format "$$N %e" --output $@ --append \
 		mono $< -size:$$N;\
 	done
+Out.numericalWaveFunctionsData.txt : numericalWaveFunctions.exe
+	mono $< -rMax:14 -dr:0.3 -outFile:$@
+Out.analyticalWaveFunctionsData.txt : analyticalWaveFunctions.exe
+	mono $< -rMax:14 -dr:0.3 -outFile:$@
 
 # Rule to make main commandline output file (as well as wavevector data).
 Out.txt : main.exe
@@ -96,6 +102,10 @@ convergence.exe : convergence.cs evd.dll matrix.dll
 	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
 resources.exe : resources.cs evd.dll matrix.dll
 	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
+numericalWaveFunctions.exe : numericalWaveFunctions.cs evd.dll matrix.dll
+	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
+analyticalWaveFunctions.exe : analyticalWaveFunctions.cs evd.dll matrix.dll
+	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
 
 # Rules to make libraries.
 evd.dll : evd.cs matrix.dll
@@ -105,4 +115,4 @@ matrix.dll: $(LIBSPATH)matrix.cs $(LIBSPATH)vector.cs
 
 # Rule to clean.
 clean :
-	$(RM) *.exe [Oo]ut.* *.dll
+	$(RM) *.exe [Oo]ut.* *.dll *.log
