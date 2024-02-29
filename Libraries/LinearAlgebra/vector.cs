@@ -1,5 +1,5 @@
 /* Class Vector in namespace LinearAlgebra contains the implementation
-of real vectors with entries being doubles. Basic arithemtic operations
+of real vectors with entries being doubles. Basic arithmetic operations
 has been implemented. Further methods enabling easy vector computations 
 has also been implemented. */
 

@@ -1,7 +1,7 @@
 all : Out.txt Out.rMaxConvergence.gnuplot.png Out.drConvergence.gnuplot.png Out.waveVectors.gnuplot.png Out.resources.gnuplot.png 
 
-# Path to linearalgebra library.
-LIBSPATH = ../../Libraries/LinearAlgebra/
+# Path to external self-made library.
+LIBSPATH = ../../Libraries/
 
 # Image files.
 Out.rMaxConvergence.gnuplot.png : Out.rMaxConvergenceData.txt
@@ -91,27 +91,25 @@ Out.numericalWaveFunctionsData.txt : numericalWaveFunctions.exe
 Out.analyticalWaveFunctionsData.txt : analyticalWaveFunctions.exe
 	mono $< -rMax:14 -dr:0.3 -outFile:$@
 
-# Rule to make main commandline output file (as well as wavevector data).
+# Main command-line output.
 Out.txt : main.exe
 	mono $< -rMax:14 -dr:0.05 -outFile:Out.numericalWaveVectorsData.txt,Out.analyticalWaveVectorsData.txt > $@
 
-# Rule to make executables.
-main.exe : main.cs evd.dll matrix.dll
-	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
-convergence.exe : convergence.cs evd.dll matrix.dll
-	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
-resources.exe : resources.cs evd.dll matrix.dll
-	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
-numericalWaveFunctions.exe : numericalWaveFunctions.cs evd.dll matrix.dll
-	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
-analyticalWaveFunctions.exe : analyticalWaveFunctions.cs evd.dll matrix.dll
-	mcs -target:exe -reference:evd.dll -reference:matrix.dll -out:$@ $<
+# Executables.
+main.exe : main.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+convergence.exe : convergence.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+resources.exe : resources.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+numericalWaveFunctions.exe : numericalWaveFunctions.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+analyticalWaveFunctions.exe : analyticalWaveFunctions.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
 
-# Rules to make libraries.
-evd.dll : evd.cs matrix.dll
-	mcs -target:library -reference:matrix.dll -out:$@ $<
-matrix.dll: $(LIBSPATH)matrix.cs $(LIBSPATH)vector.cs
-	mcs -target:library -out:$@ $^
+# Libraries.
+LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
+	mcs -target:library -out:$@ $<
 
 # Rule to clean.
 clean :

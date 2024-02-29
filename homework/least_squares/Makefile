@@ -1,7 +1,7 @@
 all: Out.txt
 
-# Path to LinearAlgebra library.
-LIBSPATH = ../../Libraries/LinearAlgebra/
+# Path to external self-made libraries.
+LIBSPATH = ../../Libraries/
 
 # Image files.
 # ...
@@ -14,12 +14,14 @@ Out.txt : main.exe
 	mono $< > $@
 
 # Executables.
-main.exe : main.cs matrix.dll
-	mcs -target:exe -reference:matrix.dll -out:$@ $<
+main.exe : main.cs leastSquares.dll LinearAlgebra.dll
+	mcs -target:exe -reference:leastSquares.dll -reference:LinearAlgebra.dll -out:$@ $<
 
 # Libraries.
-matrix.dll: $(LIBSPATH)matrix.cs $(LIBSPATH)vector.cs
-	mcs -target:library -out:$@ $^
+LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
+	mcs -target:library -out:$@ $<
+leastSquares.dll : leastSquares.cs LinearAlgebra.dll
+	mcs -target:library -reference:LinearAlgebra.dll -out:$@ $<
 
 # Rule to clean.
 clean :

@@ -1,5 +1,5 @@
 /* Class Matrix in namespace LinearAlgebra contains the implementation
-of real matrices with entries being doubles. Basic arithemtic operations
+of real matrices with entries being doubles. Basic arithmetic operations
 has been implemented, as well as matrix/vector multiplication. Further
 methods enabling easy matrix/vector computations has also been implemented. */
 

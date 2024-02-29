@@ -1,5 +1,9 @@
 all: Out.txt Out.times.gnuplot.png
 
+# Path to external self-made libraries.
+LIBSPATH = ../../Libraries/
+
+# Image file.
 Out.times.gnuplot.png : Out.times.txt
 	echo '\
 			set terminal png background "white" ;\
@@ -11,9 +15,11 @@ Out.times.gnuplot.png : Out.times.txt
 			plot "$<" with lines notitle ;\
 		' | gnuplot
 
+# Main command-line output.
 Out.txt : main.exe
 	mono $< > $@
 
+# Data
 Out.times.txt : resources.exe
 	>$@
 	for N in $$(seq 100 5 500); do \
@@ -21,20 +27,16 @@ Out.times.txt : resources.exe
 		mono $< -size:$$N;\
 	done
 
-main.exe : main.cs vector.dll matrix.dll qrgs.dll
-	mcs -target:exe -out:$@ -reference:vector.dll -reference:matrix.dll -reference:qrgs.dll $<
+# Executables.
+main.exe : main.cs LinearAlgebra.dll
+	mcs -target:exe -out:$@ -reference:LinearAlgebra.dll $<
+resources.exe : resources.cs LinearAlgebra.dll
+	mcs -target:exe -out:$@ -reference:LinearAlgebra.dll $<
 
-resources.exe : resources.cs vector.dll matrix.dll qrgs.dll
-	mcs -target:exe -out:$@ -reference:vector.dll -reference:matrix.dll -reference:qrgs.dll $<
-
-matrix.dll : matrix.cs vector.dll
-	mcs -target:library -reference:vector.dll -out:$@ $<
-
-vector.dll : vector.cs
+# Libraries.
+LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
 	mcs -target:library -out:$@ $<
 
-qrgs.dll : qrgs.cs matrix.dll vector.dll
-	mcs -target:library -reference:matrix.dll -reference:vector.dll -out:$@ $<
-
+# Rule to clean.
 clean :
 	$(RM) *.exe Out.* *.dll *.svg

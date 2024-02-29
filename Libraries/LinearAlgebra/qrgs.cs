@@ -54,7 +54,7 @@ namespace LinearAlgebra
         }
 
         /* Method solves A * x = b using decomp. A = Q * R, by rewriting 
-        R * x = Q^T * b and then using backsubstitution. */
+        R * x = Q^T * b and then using back substitution. */
         public Vector SolveLinearEq(Vector b)
         {
             Vector x = Q.T() * b;
@@ -125,6 +125,30 @@ namespace LinearAlgebra
                 }
                 return B;
             }
+        }
+
+        // Method computes pseudo-inverse of tall matrix A.
+        public Matrix PseudoInverse()
+        {
+            Matrix B = new Matrix(inputNumCols, inputNumRows);
+            for (int i = 0; i < inputNumCols; i++)
+            {
+                Vector ei = new Vector(inputNumRows);
+                for (int j = 0; j < inputNumRows; j++)
+                {
+                    if (i == j)
+                    {
+                        ei[j] = 1.0;
+                    }
+                    else
+                    {
+                        ei[j] = 0.0;
+                    }
+                }
+                Vector bi = SolveLinearEq(ei);
+                B[i] = bi;
+            }
+            return B;
         }
     }
 }
