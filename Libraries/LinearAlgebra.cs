@@ -28,6 +28,19 @@ namespace LinearAlgebra
 			_data = new double[_numRows * _numCols];
 		}
 		public Matrix(int n) : this(n, n) {}
+		public Matrix(string inputFile)
+		{
+			string inputData = "";
+			using (var inStream = new System.IO.StreamReader(inputFile))
+			{
+				inputData = inStream.ReadToEnd();
+			}
+			var rowsData = inputData.Split("\n");
+			_numRows = rowsData.Length;
+			_numCols = rowsData[0].Split(",").Length;
+			_data = new double[_numRows * _numCols];
+			this.DataFromString(inputData);
+		}
 
 		// Indexing methods.
 		public double this[int i, int j]
@@ -409,6 +422,29 @@ namespace LinearAlgebra
             }
         }
         public Vector(int n) : this(n, 1) {}
+		public Vector(string data)
+		{
+			var rows = data.Split("\n");
+			int m = rows.Length, n = rows[0].Split(",").Length;
+			_numRows = m;
+			_numCols = n;
+			_data = new double[m * n];
+			for (int i = 0; i < m; i++)
+			{
+				var entries = rows[i].Split(",");
+				for (int j = 0; j < n; j++)
+				{
+					try
+					{
+						_data[i + j * m] = double.Parse(entries[j]);
+					}
+					catch (InvalidCastException e)
+					{
+						throw new InvalidCastException("Wrong type of input string", e);
+					}
+				}
+			}
+		}
 
         // Indexing methods.
         public double this[int i]
@@ -601,6 +637,17 @@ namespace LinearAlgebra
             }
         }
         public static double Norm(Vector v) => Sqrt(InnerProduct(v, v));
+
+		// Method to apply transformation to all entries of vector using input delegate.
+		public Vector Apply(Func<double, double> transformation)
+		{
+			Vector transformedVector = new Vector(this.Length);
+			for (int i = 0; i < this.Length; i++)
+			{
+				transformedVector[i] = transformation(this[i]);
+			}
+			return transformedVector;
+		}
     }
 
     /* Class QRGS in solves linear equations, computes determinants and inverses 

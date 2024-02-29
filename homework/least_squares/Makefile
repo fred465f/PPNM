@@ -1,17 +1,30 @@
-all: Out.txt
+all: Out.fitActivity.gnuplot.svg
 
 # Path to external self-made libraries.
 LIBSPATH = ../../Libraries/
 
 # Image files.
-# ...
-
-# Data for image files.
-# ...
+Out.fitActivity.gnuplot.svg : Out.txt Makefile
+	echo ' \
+			set terminal svg background "white" ;\
+			set out "$@" ;\
+			set datafile separator "," ;\
+			set xlabel "t (Days)" font ", 14" ;\
+			set ylabel "Activity (Relative units)" font ", 14" ;\
+			set title "Activity of ThX vs. exponential fit" font ", 14" ;\
+			set grid ;\
+			set key box height 1 width -6 font ", 14" at screen 0.90, 0.82 ;\
+			set xrange [0: 16] ;\
+			a = 141.338164625218; lambda = 0.169887082001008 ;\
+			plot "inputActivityData.txt" title "Data" lt 7 lc 0 with errorbars, \
+			"Out.fitActivityData.txt" using 1:2 with lines lc 7 lw 2 title sprintf("Fit: %.f * e^{-%.2f}", a, lambda), \
+			"Out.fitActivityData.txt" using 1:3 with lines lc 6 lw 2 title "Fit: param. -= error", \
+			"Out.fitActivityData.txt" using 1:4 with lines lc 6 lw 2 title "Fit: param. += error" ;\
+		' | gnuplot
 
 # Main output to commandline
 Out.txt : main.exe
-	mono $< > $@
+	mono $< -inFile:inputActivityData.txt -outFile:Out.fitActivityData.txt > $@
 
 # Executables.
 main.exe : main.cs leastSquares.dll LinearAlgebra.dll

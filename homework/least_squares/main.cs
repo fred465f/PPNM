@@ -5,21 +5,80 @@ using LinearAlgebra;
 
 class Program
 {
-    public static void Main()
+    public static int Main(string[] args)
     {
-        // Radioactive decay data for ThX.
-        Vector time = new Vector(9);
-        time.DataFromString("1\n2\n3\n4\n6\n9\n10\n13\n15"); // In units of days.
-        Vector activity = new Vector(9);
-        activity.DataFromString("117\n100\n88\n72\n53\n29.5\n25.2\n15.2\n11.1"); // In relative units.
-        Vector activityError = new Vector(9);
-        activityError.DataFromString("5\n5\n5\n4\n4\n3\n3\n2\n2");
+        // Variables.
+        string dataInFile = "";
+        string dataOutFile = "";
 
-        Matrix A = new Matrix(3, 2);
-        A.DataFromString("1,0\n0,1\n0,0");
-        QRGS qrgs = new QRGS(A);
-        Matrix B = qrgs.PseudoInverse();
-        A.PrintMatrix();
-        B.PrintMatrix();
+        // Parse command-line inputs.
+        foreach (var arg in args)
+        {
+            var words = arg.Split(":");
+            if (words[0] == "-inFile")
+            {
+                dataInFile = words[1];
+            }
+            else if (words[0] == "-outFile")
+            {
+                dataOutFile = words[1];
+            }
+        }
+
+        // Throw error if no input or output files were provided.
+        if (dataInFile == string.Empty || dataOutFile == string.Empty)
+        {
+            return 1;
+        }
+
+        // Extract data from input file.
+        Matrix inputData = new Matrix(dataInFile);
+
+        // Radioactive decay data for ThX.
+        Vector time = inputData[0]; // In units of days.
+        Vector activity = inputData[1]; // In relative units.
+        Vector activityError = inputData[2];
+
+        /* We fit after the exponential decay using the logarithmic approach,
+        i.e ln(y) = ln(a) - \lambda * t. Define fitting functions for this. */
+        var functions = new Func<double, double>[] {x => 1, x => x};
+
+        // Apply logarithmic transformation to activity data.
+        Vector activityLog = activity.Apply(Log);
+        
+        // Uncertainty of logarithm should be properly taken care of as dln = dy / y.
+        Vector activityErrorLog = new Vector(activityError.Length);
+        for (int i = 0; i < activityError.Length; i++)
+        {
+            activityErrorLog[i] = activityError[i] / activity[i];
+        }
+
+        // Perform least squares fit.
+        (Vector coefficients, Matrix covarianceMatrix) = LeastSquares.Fit(functions, time, activityLog, activityErrorLog);
+
+        // Transform coefficients back pre-log form.
+        double a = Exp(coefficients[0]);
+        double aError = Sqrt(covarianceMatrix[0, 0]);
+        double lambda = - coefficients[1];
+        double lambdaError = Sqrt(covarianceMatrix[1, 1]);
+        WriteLine($"Exponential fit of data, i.e a * exp(lambda * t), was performed. Fitting parameters was found to be a = {Round(a, 3)} +- {Round(aError, 3)} and lambda = {Round(lambda, 3)} +- {Round(lambdaError, 3)}.");
+
+        // Construct fit data.
+        using (var outStream = new System.IO.StreamWriter(dataOutFile, append:false))
+        {
+            for (int i = 0; i <= 16; i++)
+            {
+                outStream.WriteLine($"{i},{a * Exp(- lambda * i)},{(a - aError) * Exp(- (lambda - lambdaError) * i)},{(a + aError) * Exp(- (lambda + lambdaError) * i)}");
+            }
+        }
+
+        // Compute half-life and propagated error.
+        double halfLife = Log(2) / lambda;
+        double halfLifeError = Log(2) / (lambda * lambda) * lambdaError;
+        double comparisonValueForHalfLife = 3.631;
+        WriteLine($"Got half-life of ThX to be {Round(halfLife, 3)} +- {Round(halfLifeError, 3)}, which should be compared with {comparisonValueForHalfLife}. Does not seem to be in agreement within the uncertainties!");
+
+        // Successful program.
+        return 0;
     }
 }

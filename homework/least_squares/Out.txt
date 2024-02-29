@@ -1,5 +1,2 @@
-1 0 
-0 1 
-0 0 
-1 0 0 
-0 1 0 
+Exponential fit of data, i.e a * exp(lambda * t), was performed. Fitting parameters was found to be a = 141.338 +- 0.028 and lambda = 0.17 +- 0.003.
+Got half-life of ThX to be 4.08 +- 0.083, which should be compared with 3.631. Does not seem to be in agreement within the uncertainties!
