@@ -1,3 +1,8 @@
+/* Program checks implementation of LeastSquares class in LinearAlgebra namespace,
+by applying it to the given radioactive decay data of ThX. It takes two input filenames,
+one storing input data and one referring to file which should contain the output data,
+used for plotting in Makefile. */
+
 using System;
 using static System.Math;
 using static System.Console;
