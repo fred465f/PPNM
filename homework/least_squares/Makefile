@@ -9,9 +9,9 @@ Out.fitActivity.gnuplot.svg : Out.txt Makefile
 			set terminal svg background "white" ;\
 			set out "$@" ;\
 			set datafile separator "," ;\
-			set xlabel "t (Days)" font ", 14" ;\
-			set ylabel "Activity (Relative units)" font ", 14" ;\
-			set title "Activity of ThX vs. exponential fit" font ", 14" ;\
+			set xlabel "t (days)" font ", 14" ;\
+			set ylabel "Activity (relative units)" font ", 14" ;\
+			set title "Activity of ThX" font ", 14" ;\
 			set grid ;\
 			set key box height 1 width -6 font ", 14" at screen 0.90, 0.82 ;\
 			set xrange [0: 16] ;\

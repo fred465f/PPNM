@@ -281,12 +281,12 @@
 	<path stroke='black'  d='M72.53,57.01 L72.53,422.40 L574.82,422.40 L574.82,57.01 L72.53,57.01 Z  '/></g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(19.83,239.71) rotate(270)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="middle">
-		<text><tspan font-family="Arial" >Activity (Relative units)</tspan></text>
+		<text><tspan font-family="Arial" >Activity (relative units)</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(323.67,471.95)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="middle">
-		<text><tspan font-family="Arial" >t (Days)</tspan></text>
+		<text><tspan font-family="Arial" >t (days)</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
@@ -343,9 +343,9 @@
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
-	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,149.41 L530.20,149.41 M72.53,99.69 L103.92,149.17 L135.32,191.07 L166.71,226.54 L198.10,256.57 L229.50,282.00
-		L260.89,303.52 L292.28,321.75 L323.68,337.18 L355.07,350.25 L386.46,361.31 L417.85,370.68 L449.25,378.61 L480.64,385.32
-		L512.03,391.01 L543.43,395.82 L574.82,399.90  '/></g>
+	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,149.41 L530.20,149.41 M72.53,108.61 L103.92,156.72 L135.32,197.46 L166.71,231.95 L198.10,261.15 L229.50,285.87
+		L260.89,306.81 L292.28,324.53 L323.68,339.54 L355.07,352.24 L386.46,363.00 L417.85,372.11 L449.25,379.82 L480.64,386.35
+		L512.03,391.88 L543.43,396.56 L574.82,400.52  '/></g>
 	</g>
 	<g id="gnuplot_plot_4" ><title>Fit: param. += error</title>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
@@ -354,9 +354,9 @@
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
-	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,170.41 L530.20,170.41 M72.53,99.56 L103.92,150.94 L135.32,194.14 L166.71,230.47 L198.10,261.01 L229.50,286.69
-		L260.89,308.29 L292.28,326.45 L323.68,341.72 L355.07,354.56 L386.46,365.35 L417.85,374.43 L449.25,382.07 L480.64,388.48
-		L512.03,393.88 L543.43,398.42 L574.82,402.24  '/></g>
+	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,170.41 L530.20,170.41 M72.53,90.65 L103.92,143.44 L135.32,187.84 L166.71,225.17 L198.10,256.55 L229.50,282.95
+		L260.89,305.14 L292.28,323.80 L323.68,339.49 L355.07,352.68 L386.46,363.78 L417.85,373.11 L449.25,380.95 L480.64,387.55
+		L512.03,393.09 L543.43,397.76 L574.82,401.68  '/></g>
 	</g>
 <g fill="none" color="#FFFFFF" stroke="rgb(  0, 114, 178)" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>
@@ -368,7 +368,7 @@
 	<path stroke='black'  d='M72.53,57.01 L72.53,422.40 L574.82,422.40 L574.82,57.01 L72.53,57.01 Z  '/></g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(323.67,31.56)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="middle">
-		<text><tspan font-family="Arial" >Activity of ThX vs. exponential fit</tspan></text>
+		<text><tspan font-family="Arial" >Activity of ThX</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">

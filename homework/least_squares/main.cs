@@ -58,9 +58,10 @@ class Program
 
         // Transform coefficients back pre-log form.
         double a = Exp(coefficients[0]);
-        double aError = Sqrt(covarianceMatrix[0, 0]);
+        double aError = Sqrt(covarianceMatrix[0, 0]); // This is actually not correct! This is needs error propagation trough ln(x). Done below.
+        aError = aError * a;
         double lambda = - coefficients[1];
-        double lambdaError = Sqrt(covarianceMatrix[1, 1]);
+        double lambdaError = Sqrt(covarianceMatrix[1, 1]); // Error propagation for transformation x --> -x is trivial.
         WriteLine($"Exponential fit of data, i.e a * exp(lambda * t), was performed. Fitting parameters was found to be a = {Round(a, 3)} +- {Round(aError, 3)} and lambda = {Round(lambda, 3)} +- {Round(lambdaError, 3)}.");
 
         // Construct fit data.
