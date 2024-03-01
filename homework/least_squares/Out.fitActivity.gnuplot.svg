@@ -335,27 +335,31 @@
 		L512.03,392.48 L543.43,397.15 L574.82,401.10  '/></g>
 	</g>
 	<g id="gnuplot_plot_3" ><title>Fit: param. -= error</title>
-<g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+<g fill="none" color="#FFFFFF" stroke="rgb(229,  30,  16)" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(472.25,153.96)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="end">
 		<text><tspan font-family="Arial" >Fit: param. -= error</tspan></text>
 	</g>
 </g>
-<g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
-	<path stroke='rgb(  0, 114, 178)'  d='M482.04,149.41 L530.20,149.41 M72.53,99.69 L103.92,149.17 L135.32,191.07 L166.71,226.54 L198.10,256.57 L229.50,282.00
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,149.41 L530.20,149.41 M72.53,99.69 L103.92,149.17 L135.32,191.07 L166.71,226.54 L198.10,256.57 L229.50,282.00
 		L260.89,303.52 L292.28,321.75 L323.68,337.18 L355.07,350.25 L386.46,361.31 L417.85,370.68 L449.25,378.61 L480.64,385.32
 		L512.03,391.01 L543.43,395.82 L574.82,399.90  '/></g>
 	</g>
 	<g id="gnuplot_plot_4" ><title>Fit: param. += error</title>
-<g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(472.25,174.96)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="end">
 		<text><tspan font-family="Arial" >Fit: param. += error</tspan></text>
 	</g>
 </g>
-<g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
-	<path stroke='rgb(  0, 114, 178)'  d='M482.04,170.41 L530.20,170.41 M72.53,99.56 L103.92,150.94 L135.32,194.14 L166.71,230.47 L198.10,261.01 L229.50,286.69
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+	<path stroke='rgb(  0, 114, 178)' stroke-dasharray='2.5,4.0'  d='M482.04,170.41 L530.20,170.41 M72.53,99.56 L103.92,150.94 L135.32,194.14 L166.71,230.47 L198.10,261.01 L229.50,286.69
 		L260.89,308.29 L292.28,326.45 L323.68,341.72 L355.07,354.56 L386.46,365.35 L417.85,374.43 L449.25,382.07 L480.64,388.48
 		L512.03,393.88 L543.43,398.42 L574.82,402.24  '/></g>
 	</g>
+<g fill="none" color="#FFFFFF" stroke="rgb(  0, 114, 178)" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>
 <g fill="none" color="black" stroke="black" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">

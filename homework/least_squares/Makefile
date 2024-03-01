@@ -18,8 +18,8 @@ Out.fitActivity.gnuplot.svg : Out.txt Makefile
 			a = 141.338164625218; lambda = 0.169887082001008 ;\
 			plot "inputActivityData.txt" title "Data" lt 7 lc 0 with errorbars, \
 			"Out.fitActivityData.txt" using 1:2 with lines lc 7 lw 2 title sprintf("Fit: %.f * e^{-%.2f}", a, lambda), \
-			"Out.fitActivityData.txt" using 1:3 with lines lc 6 lw 2 title "Fit: param. -= error", \
-			"Out.fitActivityData.txt" using 1:4 with lines lc 6 lw 2 title "Fit: param. += error" ;\
+			"Out.fitActivityData.txt" using 1:3 with lines dashtype 2 lc 6 lw 1 title "Fit: param. -= error", \
+			"Out.fitActivityData.txt" using 1:4 with lines dashtype 2 lc 6 lw 1 title "Fit: param. += error" ;\
 		' | gnuplot
 
 # Main output to commandline
