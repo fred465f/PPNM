@@ -27,14 +27,12 @@ Out.txt : main.exe
 	mono $< -inFile:inputActivityData.txt -outFile:Out.fitActivityData.txt > $@
 
 # Executables.
-main.exe : main.cs leastSquares.dll LinearAlgebra.dll
-	mcs -target:exe -reference:leastSquares.dll -reference:LinearAlgebra.dll -out:$@ $<
+main.exe : main.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
 
 # Libraries.
 LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
 	mcs -target:library -out:$@ $<
-leastSquares.dll : leastSquares.cs LinearAlgebra.dll
-	mcs -target:library -reference:LinearAlgebra.dll -out:$@ $<
 
 # Rule to clean.
 clean :
