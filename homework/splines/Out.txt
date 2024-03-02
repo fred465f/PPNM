@@ -1,1 +1,3 @@
-Hello!
+0
+three = 3
+half = 0
