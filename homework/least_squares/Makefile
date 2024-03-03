@@ -4,7 +4,7 @@ all: Out.fitActivity.gnuplot.svg
 LIBSPATH = ../../Libraries/
 
 # Image files.
-Out.fitActivity.gnuplot.svg : Out.txt Makefile
+Out.fitActivity.gnuplot.svg : Out.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\

@@ -12,8 +12,8 @@ public class LinearSpline
     // Constructor.
     public LinearSpline(Vector xValues, Vector yValues)
     {
-        x = xValues;
-        y = yValues;
+        x = xValues.Copy();
+        y = yValues.Copy();
     }
 
     // Do interpolation using linear splines.
@@ -49,7 +49,6 @@ public class LinearSpline
             double integral = 0.0;
             for (int j = 0; j <= i; j++)
             {
-                WriteLine($"{j}");
                 double dx = x[j + 1] - x[j];
                 if (!(dx > 0))
                 {
@@ -58,13 +57,13 @@ public class LinearSpline
                 double dy = y[j + 1] - y[j];
                 if (j == i)
                 {
-                    integral += (1/2) * (dy/dx) * z*z + (y[j] - (dy/dx) * x[j]) * z;
-                    integral -= (1/2) * (dy/dx) * x[j]*x[j] + (y[j] - (dy/dx) * x[j]) * x[j];
+                    integral += (0.5) * (dy/dx) * z*z + (y[j] - (dy/dx) * x[j]) * z;
+                    integral -= (0.5) * (dy/dx) * x[j]*x[j] + (y[j] - (dy/dx) * x[j]) * x[j];
                 }
                 else
                 {
-                    integral += (1/2) * (dy/dx) * x[j + 1]*x[j + 1] + (y[j] - (dy/dx) * x[j]) * x[j + 1];
-                    integral -= (1/2) * (dy/dx) * x[j]*x[j] + (y[j] - (dy/dx) * x[j]) * x[j];
+                    integral += (0.5) * (dy/dx) * x[j + 1]*x[j + 1] + (y[j] - (dy/dx) * x[j]) * x[j + 1];
+                    integral -= (0.5) * (dy/dx) * x[j]*x[j] + (y[j] - (dy/dx) * x[j]) * x[j];
                 }
             }
             return integral;
@@ -97,4 +96,20 @@ public class LinearSpline
             return i;
         }
     }
+}
+
+// Class implementing quadratic spline interpolation for chosen set of discrete data points.
+public class QuadraticSpline
+{
+    // Fields.
+
+    // Constructor.
+
+    // Do interpolation using quadratic splines.
+
+    // Perform integration from first x-value x[0] to chosen z > x[0].
+
+    // Perform differentiation from first x-value x[0] to chosen z > x[0].
+
+    // Perform binary search.
 }
