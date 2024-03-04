@@ -1,0 +1,3 @@
+Numerically computed parameters of quadratic splines did not agree with the analytically computed ones.
+Numerically computed parameters of quadratic splines did not agree with the analytically computed ones.
+Numerically computed parameters of quadratic splines did not agree with the analytically computed ones.

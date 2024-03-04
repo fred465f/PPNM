@@ -1,14 +1,15 @@
-all: Out.txt Out.linearSplineData.svg
+all: Out.txt Out.linearSpline.gnuplot.svg
 
 # Path to external self-made libraries.
 LIBSPATH = ../../Libraries/
 
 # Image files.
-Out.linearSplineData.svg : Out.linearSplineData.txt Makefile
+Out.linearSpline.gnuplot.svg : Out.linearSplineData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
 			set datafile separator "," ;\
+			set label "Analytical integral approx. 10.667" at -0.8, 1.5 font ", 14" ;\
 			set xlabel "x" font ", 14" ;\
 			set ylabel "f(x)" font ", 14" ;\
 			set title "Test of LinearSpline class" font ", 14" ;\
@@ -26,11 +27,9 @@ Out.linearSplineData.svg : Out.linearSplineData.txt Makefile
 # Data
 Out.linearSplineData.txt : testLinearSpline.exe
 	mono $< -inFile:In.linearSplineData.txt > $@
-Out.quadraticSplineData.txt : testQuadraticSpline.exe
-	mono $< -inFile:In.quadraticSplineData.txt > $@
 
 # Main output to commandline
-Out.txt : main.exe
+Out.txt : testQuadraticSpline.exe
 	mono $< > $@
 
 # Executables.

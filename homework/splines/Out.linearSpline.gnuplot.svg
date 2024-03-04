@@ -278,7 +278,10 @@
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
-	<path stroke='black'  d='M55.75,57.01 L55.75,422.40 L574.82,422.40 L574.82,57.01 L55.75,57.01 Z  '/></g>
+	<path stroke='black'  d='M55.75,57.01 L55.75,422.40 L574.82,422.40 L574.82,57.01 L55.75,57.01 Z  '/>	<g transform="translate(211.47,312.77)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="start">
+		<text><tspan font-family="Arial" >Analytical integral approx. 10.667</tspan></text>
+	</g>
+</g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(19.83,239.71) rotate(270)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="middle">
 		<text><tspan font-family="Arial" >f(x)</tspan></text>
