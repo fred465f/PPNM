@@ -63,7 +63,7 @@ class Program
 
         // Transform coefficients back pre-log form.
         double a = Exp(coefficients[0]);
-        double aError = Sqrt(covarianceMatrix[0, 0]); // This is actually not correct! This is needs error propagation trough ln(x). Done below.
+        double aError = Sqrt(covarianceMatrix[0, 0]); // This is actually not correct! This is needs error propagation trough exp(x). Done below.
         aError = aError * a;
         double lambda = - coefficients[1];
         double lambdaError = Sqrt(covarianceMatrix[1, 1]); // Error propagation for transformation x --> -x is trivial.
@@ -74,7 +74,7 @@ class Program
         {
             for (int i = 0; i <= 16; i++)
             {
-                outStream.WriteLine($"{i},{a * Exp(- lambda * i)},{(a - aError) * Exp(- (lambda - lambdaError) * i)},{(a + aError) * Exp(- (lambda + lambdaError) * i)}");
+                outStream.WriteLine($"{i},{a * Exp(- lambda * i)},{(a - aError) * Exp(- (lambda + lambdaError) * i)},{(a + aError) * Exp(- (lambda - lambdaError) * i)}");
             }
         }
 
