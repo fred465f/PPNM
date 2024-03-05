@@ -1,0 +1,4 @@
+Check that numerically computed quadratic spline parameters agrees with the analytically computed ones for different functions:
+ - constant function (passed)
+ - linear function (passed)
+ - quadratic function (passed)

@@ -619,6 +619,18 @@ namespace LinearAlgebra
 			return u;
 		}
 
+		// Static method returns a random vector.
+		public static Vector RandomVector(int size, int seed = 1)
+		{
+			var rnd = new Random(seed);
+			Vector u = new Vector(size);
+			for (int i = 0; i < size; i++)
+			{
+				u[i] = rnd.NextDouble();
+			}
+			return u;
+		}
+
         // Inner product and norm.
         public static double InnerProduct(Vector v, Vector w)
         {

@@ -1,0 +1,1 @@
+Method solved random (100, 100) system of tri-diagonal equations.
