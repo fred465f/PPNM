@@ -1,7 +1,7 @@
 all : Out.txt Out.rMaxConvergence.gnuplot.png Out.drConvergence.gnuplot.png Out.waveVectors.gnuplot.png Out.resources.gnuplot.png 
 
 # Path to external self-made library.
-LIBSPATH = ../../Libraries/
+LIBSPATH = ../../Libraries/LinearAlgebra/
 
 # Image files.
 Out.rMaxConvergence.gnuplot.png : Out.rMaxConvergenceData.txt
@@ -108,8 +108,8 @@ analyticalWaveFunctions.exe : analyticalWaveFunctions.cs LinearAlgebra.dll
 	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
 
 # Libraries.
-LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
-	mcs -target:library -out:$@ $<
+LinearAlgebra.dll : $(LIBSPATH)Matrix.cs $(LIBSPATH)Vector.cs $(LIBSPATH)EVD.cs
+	mcs -target:library -out:$@ $^
 
 # Rule to clean.
 clean :

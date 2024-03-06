@@ -1,7 +1,7 @@
 all: Out.fitActivity.gnuplot.svg
 
 # Path to external self-made libraries.
-LIBSPATH = ../../Libraries/
+LIBSPATH = ../../Libraries/LinearAlgebra/
 
 # Image files.
 Out.fitActivity.gnuplot.svg : Out.txt
@@ -31,8 +31,8 @@ main.exe : main.cs LinearAlgebra.dll
 	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
 
 # Libraries.
-LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
-	mcs -target:library -out:$@ $<
+LinearAlgebra.dll : $(LIBSPATH)Matrix.cs $(LIBSPATH)Vector.cs $(LIBSPATH)QRGS.cs $(LIBSPATH)LeastSquares.cs
+	mcs -target:library -out:$@ $^
 
 # Rule to clean.
 clean :

@@ -1,7 +1,7 @@
 all: Out.txt Out.times.gnuplot.png
 
 # Path to external self-made libraries.
-LIBSPATH = ../../Libraries/
+LIBSPATH = ../../Libraries/LinearAlgebra/
 
 # Image file.
 Out.times.gnuplot.png : Out.times.txt
@@ -34,8 +34,8 @@ resources.exe : resources.cs LinearAlgebra.dll
 	mcs -target:exe -out:$@ -reference:LinearAlgebra.dll $<
 
 # Libraries.
-LinearAlgebra.dll : $(LIBSPATH)LinearAlgebra.cs
-	mcs -target:library -out:$@ $<
+LinearAlgebra.dll : $(LIBSPATH)Matrix.cs $(LIBSPATH)Vector.cs $(LIBSPATH)QRGS.cs
+	mcs -target:library -out:$@ $^
 
 # Rule to clean.
 clean :
