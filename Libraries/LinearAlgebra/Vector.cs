@@ -1,14 +1,13 @@
-/* Class Vector in namespace LinearAlgebra contains the implementation
-of real vectors with entries being doubles. Basic arithmetic operations
-has been implemented. Further methods enabling easy vector computations 
-has also been implemented. */
-
 using System;
+using LinearAlgebra;
 using static System.Math;
 using static System.Console;
 
 namespace LinearAlgebra
 {
+    /* Class Vector contains the implementation of real vectors with entries 
+    being doubles. Basic arithmetic operations has been implemented. Further 
+    methods enabling easy vector computations has also been implemented. */
     public class Vector
     {    
         // Fields.
@@ -30,6 +29,29 @@ namespace LinearAlgebra
             }
         }
         public Vector(int n) : this(n, 1) {}
+		public Vector(string data)
+		{
+			var rows = data.Split("\n");
+			int m = rows.Length, n = rows[0].Split(",").Length;
+			_numRows = m;
+			_numCols = n;
+			_data = new double[m * n];
+			for (int i = 0; i < m; i++)
+			{
+				var entries = rows[i].Split(",");
+				for (int j = 0; j < n; j++)
+				{
+					try
+					{
+						_data[i + j * m] = double.Parse(entries[j]);
+					}
+					catch (InvalidCastException e)
+					{
+						throw new InvalidCastException("Wrong type of input string", e);
+					}
+				}
+			}
+		}
 
         // Indexing methods.
         public double this[int i]
@@ -65,13 +87,13 @@ namespace LinearAlgebra
 					}
 					catch (InvalidCastException e)
 					{
-						throw new InvalidCastException("Wrong type of inputstring", e);
+						throw new InvalidCastException("Wrong type of input string", e);
 					}
 				}
 			}
 		}
 
-        // Terminal visualisation of vector data.
+        // Terminal visualization of vector data.
         public void PrintVector()
 		{
 			for (int i = 0; i < this.NumRows; i++)
@@ -204,6 +226,18 @@ namespace LinearAlgebra
 			return u;
 		}
 
+		// Static method returns a random vector.
+		public static Vector RandomVector(int size, int seed = 1)
+		{
+			var rnd = new Random(seed);
+			Vector u = new Vector(size);
+			for (int i = 0; i < size; i++)
+			{
+				u[i] = rnd.NextDouble();
+			}
+			return u;
+		}
+
         // Inner product and norm.
         public static double InnerProduct(Vector v, Vector w)
         {
@@ -222,5 +256,16 @@ namespace LinearAlgebra
             }
         }
         public static double Norm(Vector v) => Sqrt(InnerProduct(v, v));
+
+		// Method to apply transformation to all entries of vector using input delegate.
+		public Vector Apply(Func<double, double> transformation)
+		{
+			Vector transformedVector = new Vector(this.Length);
+			for (int i = 0; i < this.Length; i++)
+			{
+				transformedVector[i] = transformation(this[i]);
+			}
+			return transformedVector;
+		}
     }
 }

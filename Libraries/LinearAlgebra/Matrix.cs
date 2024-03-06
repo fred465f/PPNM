@@ -1,16 +1,15 @@
-/* Class Matrix in namespace LinearAlgebra contains the implementation
-of real matrices with entries being doubles. Basic arithmetic operations
-has been implemented, as well as matrix/vector multiplication. Further
-methods enabling easy matrix/vector computations has also been implemented. */
-
 using System;
 using LinearAlgebra;
-using static System.Console;
 using static System.Math;
+using static System.Console;
 
 namespace LinearAlgebra
 {
-	public class Matrix
+    /* Class Matrix contains the implementation of real matrices with entries 
+    being doubles. Basic arithmetic operations has been implemented, as well 
+    as matrix/vector multiplication. Further methods enabling easy matrix/vector 
+    computations has also been implemented. */
+    public class Matrix
 	{
 		// Fields.
 		private double[] _data;
@@ -24,6 +23,19 @@ namespace LinearAlgebra
 			_data = new double[_numRows * _numCols];
 		}
 		public Matrix(int n) : this(n, n) {}
+		public Matrix(string inputFile)
+		{
+			string inputData = "";
+			using (var inStream = new System.IO.StreamReader(inputFile))
+			{
+				inputData = inStream.ReadToEnd();
+			}
+			var rowsData = inputData.Split("\n");
+			_numRows = rowsData.Length;
+			_numCols = rowsData[0].Split(",").Length;
+			_data = new double[_numRows * _numCols];
+			this.DataFromString(inputData);
+		}
 
 		// Indexing methods.
 		public double this[int i, int j]
@@ -77,7 +89,7 @@ namespace LinearAlgebra
 					}
 					catch (InvalidCastException e)
 					{
-						throw new InvalidCastException("Wrong type of inputstring", e);
+						throw new InvalidCastException("Wrong type of input string", e);
 					}
 				}
 			}

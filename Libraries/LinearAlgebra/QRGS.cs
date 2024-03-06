@@ -1,8 +1,3 @@
-/* Class QRGS in namespace LinearAlgebra solves linear equations,
-computes determinants and inverses using the QR-decomp. of a matrix
-given doing construction of class instance. QR-decomp. is computed
-using modified Gram-Schmidt orthogonalization. */
-
 using System;
 using LinearAlgebra;
 using static System.Math;
@@ -10,6 +5,9 @@ using static System.Console;
 
 namespace LinearAlgebra
 {
+    /* Class QRGS in solves linear equations, computes determinants and inverses 
+    using the QR-decomp. of a matrix given doing construction of class instance. 
+    QR-decomp. is computed using modified Gram-Schmidt orthogonalization. */
     public class QRGS
     {
         // Fields
