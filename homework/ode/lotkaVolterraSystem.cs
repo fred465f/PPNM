@@ -2,6 +2,7 @@
 Volterra system and saves results to a file for later plotting. */
 
 using System;
+using Calculus;
 using LinearAlgebra;
 using static System.Math;
 using static System.Console;

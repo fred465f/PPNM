@@ -1,7 +1,9 @@
 all : Out.debugData.txt Out.oscillatorWithFrictionData.txt Out.lotkaVolterraSystemData.txt Out.threeBodyGravProblemData.txt
 
-# Path to self-made LinearAlgebra library.
-LIBSPATH = ../../Libraries/LinearAlgebra/
+# Paths to self-made libraries.
+LIBSPATH1 = ../../Libraries/LinearAlgebra/
+LIBSPATH2 = ../../Libraries/Calculus/
+LIBSPATH3 = ../../Libraries/DataStructures/
 
 # Images.
 # ...
@@ -17,17 +19,19 @@ Out.threeBodyGravProblemData.txt : threeBodyGravProblem.exe
 	mono $< > $@
 
 # Executables.
-debug.exe : debug.cs LinearAlgebra.dll
-	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
-oscillatorWithFriction.exe : oscillatorWithFriction.cs LinearAlgebra.dll
-	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
-lotkaVolterraSystem.exe : lotkaVolterraSystem.cs LinearAlgebra.dll
-	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
-threeBodyGravProblem.exe : threeBodyGravProblem.cs LinearAlgebra.dll
-	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+debug.exe : debug.cs LinearAlgebra.dll Calculus.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -reference:Calculus.dll -out:$@ $<
+oscillatorWithFriction.exe : oscillatorWithFriction.cs LinearAlgebra.dll Calculus.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -reference:Calculus.dll -out:$@ $<
+lotkaVolterraSystem.exe : lotkaVolterraSystem.cs LinearAlgebra.dll Calculus.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -reference:Calculus.dll -out:$@ $<
+threeBodyGravProblem.exe : threeBodyGravProblem.cs LinearAlgebra.dll Calculus.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -reference:Calculus.dll -out:$@ $<
 
 # Libraries.
-LinearAlgebra.dll : $(LIBSPATH)Matrix.cs $(LIBSPATH)Vector.cs $(LIBSPATH)ODE.cs
+LinearAlgebra.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs
+	mcs -target:library -out:$@ $^
+Calculus.dll : $(LIBSPATH1)Vector.cs $(LIBSPATH2)ODE.cs $(LIBSPATH3)GenericList.cs
 	mcs -target:library -out:$@ $^
 
 # Rule to clean.
