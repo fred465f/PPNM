@@ -10,14 +10,14 @@ namespace DataStructures
         // Fields.
         private T[] _data; 
         private int _length;
-        private int _availableSpace;
+        public int _availableSpace;
 
         // Constructors.
         public GenericList()
         {
-            _data = new T[1];
-            _length = 1;
-            _availableSpace = 1;
+            _data = new T[2];
+            _length = 0;
+            _availableSpace = 2;
         }
         public GenericList(T[] data)
         {
@@ -39,7 +39,7 @@ namespace DataStructures
         // Method to add and element to generic list.
         public void Add(T item)
         {
-            if (_availableSpace != 0)
+            if (_availableSpace > 0)
             {
                 _data[_length] = item;
                 _availableSpace -= 1;
@@ -51,8 +51,8 @@ namespace DataStructures
                 Array.Copy(_data, newData, _length);
                 newData[_length] = item;
                 _data = newData;
-                _length += 1;
                 _availableSpace = _length - 1;
+                _length += 1;
             }
         }
 
