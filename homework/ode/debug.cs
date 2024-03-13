@@ -18,7 +18,7 @@ class Program
         Vector initialSolutionValue = new Vector("0\n1");
         Func<double, Vector, Vector> function = (double x, Vector y) => new Vector($"{y[1]}\n{-y[0]}");
 
-        // Make instance of ODE class.s
+        // Make instance of ODE class.
         ODE ode = new ODE(function, initialParameterValue, initialSolutionValue);
 
         // Call driver to solve ODE.

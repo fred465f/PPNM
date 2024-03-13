@@ -25,7 +25,7 @@ namespace Calculus
         }
 
         // Driver.
-        public Vector Driver(double b, GenericList<double> xList = null, GenericList<Vector> yList = null, double h = 0.01, double absoluteError = 0.01, double relativeError = 0.01)
+        public Vector Driver(double b, GenericList<double> xList = null, GenericList<Vector> yList = null, double h = 0.01, double absoluteError = 0.01, double relativeError = 0.01, int maxIteration = 99999)
         {
             // If initial parameter value a is less than final parameter value b, throw an exception.
             if (b < a)
@@ -42,14 +42,15 @@ namespace Calculus
                     xList.Add(x);
                     yList.Add(y);
                 }
+                int currentIteration = 1;
 
-                // Driver.
+                // Driver (runs until maximum iteration counts maxIteration is reached).
                 do
                 {
                     // Check if we are done or one step away from being done.
                     if (x >= b)
                     {
-                        return ya;
+                        return y;
                     }
                     else if (x + h >= b)
                     {
@@ -96,7 +97,13 @@ namespace Calculus
 
                     // Change step size and try again.
                     h *= Min(Pow(factor, 0.25) * 0.95, 2);
-                } while (true);
+
+                    // Increase iteration step.
+                    currentIteration += 1;
+                } while (currentIteration <= maxIteration);
+
+                // Return whatever path has been calculated within maxIteration steps.
+                return y;
             }
         }
 
