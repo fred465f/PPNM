@@ -15,8 +15,8 @@ class Program
         // Variables.
         double initialParameterValue = 0;
         double finalParameterValue = 15;
-        Vector initialSolutionValue = new Vector("10\n5"); // This and functions needs to be changed!
-        Func<double, Vector, Vector> function = (double t, Vector z) => new Vector($"{1.5*t - z[0]*z[1]}\n{-3*z[1] + z[0]*z[1]}");
+        Vector initialSolutionValue = new Vector("10\n5");
+        Func<double, Vector, Vector> function = (double t, Vector z) => new Vector($"{1.5*z[0] - z[0]*z[1]}\n{-3*z[1] + z[0]*z[1]}");
 
         // Make instance of ODE class.
         ODE ode = new ODE(function, initialParameterValue, initialSolutionValue);
