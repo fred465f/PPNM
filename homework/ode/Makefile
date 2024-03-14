@@ -1,4 +1,4 @@
-all : Out.debug.gnuplot.svg Out.oscillatorWithFriction.gnuplot.svg Out.lotkaVolterraSystemData.txt Out.equatorialMotion.gnuplot.svg Out.threeBodyGravProblemData.txt
+all : Out.debug.gnuplot.svg Out.oscillatorWithFriction.gnuplot.svg Out.lotkaVolterraSystem.gnuplot.svg Out.equatorialMotion.gnuplot.svg Out.threeBodyGravProblemData.txt
 
 # Paths to self-made libraries.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
@@ -17,7 +17,7 @@ Out.debug.gnuplot.svg : Out.debugData.txt
 			set grid ;\
 			set yrange [-1.2: 1.2] ;\
 			set xrange [0: 6.28] ;\
-			plot "$<" with lines lw 2 lc rgb "#EB8628" notitle, ;\
+			plot "$<" with lines lw 2 lc rgb "#EB8628" notitle ;\
 		' | gnuplot
 Out.oscillatorWithFriction.gnuplot.svg : Out.oscillatorWithFrictionData.txt
 	echo ' \
@@ -30,7 +30,7 @@ Out.oscillatorWithFriction.gnuplot.svg : Out.oscillatorWithFrictionData.txt
 			set grid ;\
 			set yrange [-3.4: 3.4] ;\
 			set xrange [0: 12] ;\
-			plot "$<" with lines lw 2 lc rgb "#EB8628" notitle, ;\
+			plot "$<" with lines lw 2 lc rgb "#EB8628" notitle ;\
 		' | gnuplot
 Out.equatorialMotion.gnuplot.svg : Out.equatorialMotionData.txt
 	echo ' \
@@ -48,6 +48,19 @@ Out.equatorialMotion.gnuplot.svg : Out.equatorialMotionData.txt
 			"$<" using (1/$$2)*cos($$1):(1/$$2)*sin($$1) with lines lw 2 lc rgb "#75080B" title "Circular motion", \
 			"$<" using (1/$$4)*cos($$3):(1/$$4)*sin($$3) with lines lw 2 lc rgb "#F57D81" title "Elliptical motion", \
 			"<echo 0,0" with points lt 7 lc rgb "black" title "Origin" ;\
+		' | gnuplot
+Out.lotkaVolterraSystem.gnuplot.svg : Out.lotkaVolterraSystemData.txt
+	echo ' \
+			set terminal svg background "white" ;\
+			set out "$@" ;\
+			set datafile separator "," ;\
+			set xlabel "Time (s)" font ", 14" ;\
+			set title "Lotka-Volterra System" font ", 14" ;\
+			set grid ;\
+			set yrange [-0.5: 12.5] ;\
+			set xrange [0: 15] ;\
+			plot "$<" using ($$1):($$2) with lines lw 2 lc rgb "#EB8628" title "x(t)", \
+			"$<" using ($$1):($$3) with lines lw 2 lc rgb "#EB8628" title "y(t)" ;\
 		' | gnuplot
 
 # Data.
@@ -75,7 +88,7 @@ threeBodyGravProblem.exe : threeBodyGravProblem.cs Library.dll
 	mcs -target:exe -reference:Library.dll -out:$@ $<
 
 # Libraries.
-Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH2)ODE.cs $(LIBSPATH3)GenericList.cs
+Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)Splines.cs $(LIBSPATH2)ODE.cs $(LIBSPATH3)GenericList.cs
 	mcs -target:library -out:$@ $^
 
 # Rule to clean.

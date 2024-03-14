@@ -14,22 +14,23 @@ class Program
     {
         // Variables.
         double initialParameterValue = 0;
-        double finalParameterValue = 12;
-        Vector initialSolutionValue = new Vector($"{PI - 0.1}\n0"); // This and functions needs to be changed!
-        Func<double, Vector, Vector> function = (double x, Vector y) => new Vector($"{y[1]}\n{-0.25*y[1] - 5*Sin(y[0])}");
+        double finalParameterValue = 15;
+        Vector initialSolutionValue = new Vector("10\n5"); // This and functions needs to be changed!
+        Func<double, Vector, Vector> function = (double t, Vector z) => new Vector($"{1.5*t - z[0]*z[1]}\n{-3*z[1] + z[0]*z[1]}");
 
         // Make instance of ODE class.
         ODE ode = new ODE(function, initialParameterValue, initialSolutionValue);
 
         // Call driver to solve ODE.
-        GenericList<double> xList = new GenericList<double>();
-        GenericList<Vector> yList = new GenericList<Vector>();
-        Vector yAtFinalParameterValue = ode.Driver(finalParameterValue, xList, yList);
+        GenericList<double> tList = new GenericList<double>();
+        GenericList<Vector> zList = new GenericList<Vector>();
+        Vector yAtFinalParameterValue = ode.Driver(finalParameterValue, tList, zList);
 
         // Output results to standard output stream for later plotting.
-        for (int i = 0; i < yList.Length; i++)
+        WriteLine("#t,x,y");
+        for (int i = 0; i < zList.Length; i++)
         {
-            WriteLine($"{xList[i]},{yList[i][0]}");
+            WriteLine($"{tList[i]},{zList[i][0]},{zList[i][1]}");
         }
     }
 }

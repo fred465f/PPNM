@@ -125,5 +125,15 @@ namespace Calculus
             // Return results.
             return (yh, stepError);
         }
+
+        // Returns Cubic spline object, capable of performing interpolation, integration and derivatives.
+        public static CubicSpline MakeCubicSpline(Vector xVector, Vector yVector)
+        {
+            // Make cubic spline object.
+            CubicSpline cubicSpline = new CubicSpline(xVector, yVector);
+
+            // Return result.
+            return cubicSpline;
+        }
     }
 }
