@@ -1,4 +1,4 @@
-all : Out.debug.gnuplot.svg Out.oscillatorWithFriction.gnuplot.svg Out.lotkaVolterraSystem.gnuplot.svg Out.equatorialMotion.gnuplot.svg Out.threeBodyGravProblem.gnuplot.gif
+all : Out.debug.gnuplot.svg Out.oscillatorWithFriction.gnuplot.svg Out.lotkaVolterraSystem.gnuplot.svg Out.equatorialMotion.gnuplot.svg Out.threeBodyGravProblem.gnuplot.svg
 
 # Paths to self-made libraries.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
@@ -63,9 +63,9 @@ Out.equatorialMotion.gnuplot.svg : Out.equatorialMotionData.txt
 			"$<" using (1/$$4)*cos($$3):(1/$$4)*sin($$3) with lines lw 2 lc rgb "#F57D81" title "Elliptical motion", \
 			"<echo 0,0" with points lt 7 lc rgb "black" title "Origin" ;\
 		' | gnuplot
-Out.threeBodyGravProblem.gnuplot.gif : Out.threeBodyGravProblemData.txt
+Out.threeBodyGravProblem.gnuplot.svg : Out.threeBodyGravProblemData.txt
 	echo ' \
-			set terminal gif background "white" ;\
+			set terminal svg background "white" ;\
 			set out "$@" ;\
 			set datafile separator "," ;\
 			set xlabel "x" font ", 14" ;\

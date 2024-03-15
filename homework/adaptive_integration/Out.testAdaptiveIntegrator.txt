@@ -1,0 +1,11 @@
+----- Part A -----
+
+First integral was computed successfully within specified accuracy of 0.0001
+Second integral was computed successfully within specified accuracy of 0.0001
+Third integral was computed successfully within specified accuracy of 0.0001
+Fourth integral was computed successfully within specified accuracy of 0.0001
+
+----- Part B -----
+
+First integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform
+Second integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform with error 0.000485858082893942
