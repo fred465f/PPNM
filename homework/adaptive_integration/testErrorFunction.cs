@@ -18,7 +18,7 @@ class Program
         // Compute error function in range [-3, 3] and output results to standard output stream.
         WriteLine("#x,errorFunction");
         double[] xRange = new double[] {-3, 3};
-        double dx = 0.1;
+        double dx = 0.01;
         int numberXValues = (int)((xRange[1] - xRange[0])/dx);
         for (int i = 0; i < numberXValues; i++)
         {

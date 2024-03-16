@@ -24,7 +24,7 @@ class Program
         */
         WriteLine("----- Part A -----\n");
         (double firstIntegralA, double error1A) = AdaptiveIntegrator.Integrate(delegate(double x) {return Sqrt(x);}, 0, 1, acc, eps);
-        if (Abs(firstIntegralA - 2.0/3.0) < 0.01)
+        if (Abs(firstIntegralA - 2.0/3.0) < acc)
         {
             WriteLine($"First integral was computed successfully within specified accuracy of {acc}");
         }
@@ -33,7 +33,7 @@ class Program
             WriteLine($"First integral was not computed successfully within specified accuracy of {acc}");
         }
         (double secondIntegralA, double error2A) = AdaptiveIntegrator.Integrate(delegate(double x) {return 1/Sqrt(x);}, 0, 1, acc, eps);
-        if (Abs(secondIntegralA - 2.0) < 0.01)
+        if (Abs(secondIntegralA - 2.0) < acc)
         {
             WriteLine($"Second integral was computed successfully within specified accuracy of {acc}");
         }
@@ -42,7 +42,7 @@ class Program
             WriteLine($"Second integral was not computed successfully within specified accuracy of {acc}");
         }
         (double thirdIntegralA, double error3A) = AdaptiveIntegrator.Integrate(delegate(double x) {return 4*Sqrt(1 - x*x);}, 0, 1, acc, eps);
-        if (Abs(thirdIntegralA - PI) < 0.01)
+        if (Abs(thirdIntegralA - PI) < acc)
         {
             WriteLine($"Third integral was computed successfully within specified accuracy of {acc}");
         }
@@ -51,7 +51,7 @@ class Program
             WriteLine($"Third integral was not computed successfully within specified accuracy of {acc}");
         }
         (double fourthIntegralA, double error4A) = AdaptiveIntegrator.Integrate(delegate(double x) {return Log(x)/Sqrt(x);}, 0, 1, acc, eps);
-        if (Abs(fourthIntegralA + 4) < 0.01)
+        if (Abs(fourthIntegralA + 4) < acc)
         {
             WriteLine($"Fourth integral was computed successfully within specified accuracy of {acc}");
         }
@@ -68,7 +68,7 @@ class Program
         */
         WriteLine("\n----- Part B -----\n");
         (double firstIntegralB, double error1B) = AdaptiveIntegrator.IntegrateCCTransform(delegate(double x) {return 1/Sqrt(x);}, 0, 1, acc, eps);
-        if (Abs(firstIntegralB - 2.0) < 0.01)
+        if (Abs(firstIntegralB - 2.0) < acc)
         {
             WriteLine($"First integral was computed successfully within specified accuracy of {acc} using Clenshaw-Curtis variable transform");
         }
@@ -77,13 +77,38 @@ class Program
             WriteLine($"First integral was not computed successfully within specified accuracy of {acc} using Clenshaw-Curtis variable transform");
         }
         (double secondIntegralB, double error2B) = AdaptiveIntegrator.IntegrateCCTransform(delegate(double x) {return Log(x)/Sqrt(x);}, 0, 1, acc, eps);
-        if (Abs(secondIntegralB + 4.0) < 0.01)
+        if (Abs(secondIntegralB + 4.0) < acc)
         {
             WriteLine($"Second integral was computed successfully within specified accuracy of {acc} using Clenshaw-Curtis variable transform");
         }
         else
         {
             WriteLine($"Second integral was not computed successfully within specified accuracy of {acc} using Clenshaw-Curtis variable transform");
+        }
+
+        /* Test whether variable transforms allowed computation of improper integrals works as intended as part of part C. */
+        /*
+        (1) ∫_-inf^+inf dx exp(-x^2) = π,
+        (2) ∫_1^+inf dx 1/x^3 = 1/2.
+        */
+        WriteLine("\n----- Part C -----\n");
+        (double firstIntegralC, double error1C) = AdaptiveIntegrator.Integrate(delegate(double x) {return Exp(-x*x);}, double.NegativeInfinity, double.PositiveInfinity, acc, eps);
+        if (Abs(firstIntegralC - Sqrt(PI)) < acc)
+        {
+            WriteLine($"First improper integral was computed successfully within specified accuracy of {acc}");
+        }
+        else
+        {
+            WriteLine($"First improper integral was not computed successfully within specified accuracy of {acc}");
+        }
+        (double secondIntegralC, double error2C) = AdaptiveIntegrator.Integrate(delegate(double x) {return 1/Pow(x, 3);}, 1, double.PositiveInfinity, acc, eps);
+        if (Abs(secondIntegralC - 0.5) < acc)
+        {
+            WriteLine($"Second improper integral was computed successfully within specified accuracy of {acc}");
+        }
+        else
+        {
+            WriteLine($"Second improper integral was not computed successfully within specified accuracy of {acc}");
         }
     }
 }

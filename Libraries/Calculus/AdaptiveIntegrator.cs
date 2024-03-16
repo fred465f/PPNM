@@ -14,22 +14,33 @@ namespace Calculus
         // Implements above mentioned method.
         public static (double, double) Integrate(Func<double, double> f, double a, double b, double acc, double eps)
         {
+            // Step counter.
+            int numSteps = 0;
+
             // Check if either limit or both is infinity/-infinity and make appropriate variable transforms.
             if (double.IsPositiveInfinity(b) && double.IsNegativeInfinity(a))
             {
-                return(0.0, 0.0);
+                Func<double, double> fTransformed = delegate(double t) {return (f((1-t)/t) + f(-(1-t)/t))/(t*t);};
+                double f2 = fTransformed(2.0/6.0);
+                double f3 = fTransformed(4.0/6.0);
+                return IntegrateRecursiveStep(fTransformed, 0, 1, acc, eps, f2, f3, numSteps);
             }
             else if (double.IsPositiveInfinity(b))
             {
-                return(0.0, 0.0);
+                Func<double, double> fTransformed = delegate(double t) {return (f(a + (1-t)/t))/(t*t);};
+                double f2 = fTransformed(2.0/6.0);
+                double f3 = fTransformed(4.0/6.0);
+                return IntegrateRecursiveStep(fTransformed, 0, 1, acc, eps, f2, f3, numSteps);
             }
             else if (double.IsNegativeInfinity(a))
             {
-                return(0.0, 0.0);
+                Func<double, double> fTransformed = delegate(double t) {return (f(b - (1-t)/t))/(t*t);};
+                double f2 = fTransformed(2.0/6.0);
+                double f3 = fTransformed(4.0/6.0);
+                return IntegrateRecursiveStep(fTransformed, 0, 1, acc, eps, f2, f3, numSteps);
             }
             else
             {
-                int numSteps = 0;
                 double f2 = f(a + 2*(b - a)/6);
                 double f3 = f(a + 4*(b - a)/6);
                 return IntegrateRecursiveStep(f, a, b, acc, eps, f2, f3, numSteps);
