@@ -12,7 +12,7 @@ namespace Calculus
     public static class AdaptiveIntegrator
     {
         // Implements above mentioned method.
-        public static (double, double) Integrate(Func<double, double> f, double a, double b, double acc, double eps)
+        public static (double, double, int) Integrate(Func<double, double> f, double a, double b, double acc, double eps)
         {
             // Step counter.
             int numSteps = 0;
@@ -48,7 +48,7 @@ namespace Calculus
         }
 
         // Recursive step.
-        private static (double, double) IntegrateRecursiveStep(Func<double, double> f, double a, double b, double acc, double eps, double f2, double f3, int numSteps)
+        private static (double, double, int) IntegrateRecursiveStep(Func<double, double> f, double a, double b, double acc, double eps, double f2, double f3, int numSteps)
         {
             // Throw exception if numSteps gets too large, indicating no convergence of integral.
             if (numSteps > 1000000)
@@ -72,19 +72,19 @@ namespace Calculus
             if (error < tolerance)
             {
                 // Stop integral and return result.
-                return (Q, Abs(Q - q));
+                return (Q, Abs(Q - q), numSteps);
             }
             else
             {
                 // Perform recursive step.
-                (double Q1, double error1) = IntegrateRecursiveStep(f, a, (a + b)/2, acc/Sqrt(2.0), eps, f1, f2, numSteps + 1);
-                (double Q2, double error2) = IntegrateRecursiveStep(f, (a + b)/2, b, acc/Sqrt(2.0), eps, f3, f4, numSteps + 1);
-                return (Q1 + Q2, error1 + error2);
+                (double Q1, double error1, int numSteps1) = IntegrateRecursiveStep(f, a, (a + b)/2, acc/Sqrt(2.0), eps, f1, f2, numSteps + 1);
+                (double Q2, double error2, int numSteps2) = IntegrateRecursiveStep(f, (a + b)/2, b, acc/Sqrt(2.0), eps, f3, f4, numSteps + 1);
+                return (Q1 + Q2, Sqrt(Pow(error1, 2) + Pow(error2, 2)), numSteps1 + numSteps2 - numSteps);
             }
         }
 
         // Open quadrature adaptive integrator with Clenshaw-Curtis variable transformation.
-        public static (double, double) IntegrateCCTransform(Func<double, double> f, double a, double b, double acc, double eps)
+        public static (double, double, int) IntegrateCCTransform(Func<double, double> f, double a, double b, double acc, double eps)
         {
             Func<double, double> fTransformed = delegate(double theta) {return f((a+b)/2 + (b-a)/2*Cos(theta)) * Sin(theta)*(b-a)/2;};
             return Integrate(fTransformed, 0, PI, acc, eps);

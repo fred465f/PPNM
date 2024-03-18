@@ -30,18 +30,19 @@ class Program
     // Static method implements error function using its integral representation.
     public static double ErrorFunction(double z, double acc, double eps)
     {
+        // Compute error function.
         if (z < 0)
         {
             return -ErrorFunction(-z, acc, eps);
         }
         else if (z <= 1)
         {
-            (double integral, double error) = AdaptiveIntegrator.Integrate(delegate(double x) {return Exp(-x*x);}, 0, z, acc, eps);
+            (double integral, double error, int numSteps) = AdaptiveIntegrator.Integrate(delegate(double x) {return Exp(-x*x);}, 0, z, acc, eps);
             return 2/Sqrt(PI) * integral;
         }
         else
         {
-            (double integral, double error) = AdaptiveIntegrator.Integrate(delegate(double x) {return Exp(-Pow(z+(1-x)/x, 2))/(x*x);}, 0, 1, acc, eps);
+            (double integral, double error, int numSteps) = AdaptiveIntegrator.Integrate(delegate(double x) {return Exp(-Pow(z+(1-x)/x, 2))/(x*x);}, 0, 1, acc, eps);
             return 1 - 2/Sqrt(PI) * integral;
         }
     }
