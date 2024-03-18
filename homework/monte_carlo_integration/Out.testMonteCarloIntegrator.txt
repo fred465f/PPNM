@@ -1,0 +1,4 @@
+----- Part A -----
+
+Plain Monte-Carlo integrator evaluated the first integral correctly within an accuracy of 0.01 in N = 2000000 steps
+Plain Monte-Carlo integrator evaluated the second integral correctly within an accuracy of 0.01 in N = 2000000 steps

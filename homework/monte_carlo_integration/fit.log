@@ -1,0 +1,27 @@
+
+
+*******************************************************************************
+Sat Mar 16 15:13:18 2024
+
+
+FIT:    data read from "Out.testIntegratePlainData.txt"
+        format = z
+        #datapoints = 999
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = 1/sqrt(x)
+BREAK: Need via and either parameter list or file
+
+*******************************************************************************
+Sat Mar 16 15:13:37 2024
+
+
+FIT:    data read from "Out.testIntegratePlainData.txt"
+        format = z
+        #datapoints = 999
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = 1/sqrt(x)
+BREAK: Need via and either parameter list or file
