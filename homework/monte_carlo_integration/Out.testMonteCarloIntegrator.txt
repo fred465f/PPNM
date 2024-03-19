@@ -1,4 +1,14 @@
 ----- Part A -----
 
-Plain Monte-Carlo integrator evaluated the first integral correctly within an accuracy of 0.01 in N = 2000000 steps
-Plain Monte-Carlo integrator evaluated the second integral correctly within an accuracy of 0.01 in N = 2000000 steps
+Plain Monte-Carlo integrator evaluated the first integral correctly within an accuracy of 0.05 in N = 500000 steps with and actual error of 0.000244521124265429
+Plain Monte-Carlo integrator evaluated the second integral correctly within an accuracy of 0.05 in N = 500000 steps with an actual error of 0.0205883440950361
+
+----- Part B -----
+
+QRS Monte-Carlo integrator evaluated the first integral correctly within an accuracy of 0.05 in N = 500000 steps with an actual error of 3.48762186064278E-06
+QRS Monte-Carlo integrator evaluated the second integral correctly within an accuracy of 0.05 in N = 500000 steps with an actual error of 0.0124230233624616
+
+----- Part C -----
+
+RSS Monte-Carlo integrator evaluated the first integral correctly within an accuracy of 0.05 in N = 500000 steps with an actual error of 0.00087792252255614
+RRS Monte-Carlo integrator evaluated the second integral correctly within an accuracy of 0.05 in N = 500000 steps with an actual error of 0.00627771788335707

@@ -65,6 +65,11 @@ namespace Calculus
             int dim = a.Length;
             double V = 1;
             double sumHalton = 0, sumLatticeRule = 0;
+            Vector alpha = new Vector(dim);
+            for (int i = 0; i < dim; i++)
+            {
+                alpha[i] = Sqrt(PI + i) - Truncate(Sqrt(PI + i));
+            }
 
             // Compute auxiliary rectangular volume V.
             for (int i = 0; i < dim; i++)
@@ -77,30 +82,89 @@ namespace Calculus
             Vector xLatticeRule = new Vector(dim);
 
             // Perform random sampling.
-            for (int n = 0; n < N; n++)
+            for (int n = 1; n <= N; n++)
             {
                 // First for Halton Quasi-Random sequences.
                 xHalton = QuasiRandomSequenceHalton(n, dim);
-                double fxHalton = f(xHalton);
-                sumHalton += fxHalton;
+                for (int i = 0; i < dim; i++)
+                {
+                    xHalton[i] = xHalton[i] * (b[i] - a[i]) + a[i];
+                }
+                sumHalton += f(xHalton);
 
                 // Secondly for Lattice rule Quasi-Random sequences.
-                xLatticeRule = QuasiRandomSequenceLatticeRule(dim);
-                double fxLatticeRule = f(xLatticeRule);
-                sumLatticeRule += fxLatticeRule;
+                xLatticeRule = QuasiRandomSequenceLatticeRule(n, dim, alpha);
+                for (int i = 0; i < dim; i++)
+                {
+                    xLatticeRule[i] = xLatticeRule[i] * (b[i] - a[i]) + a[i];
+                }
+                sumLatticeRule += f(xLatticeRule);
             }
 
             // Compute and return integral.
             double meanHalton = sumHalton/N;
             double meanLatticeRule = sumLatticeRule/N;
-            double error = Abs(sumHalton - sumLatticeRule);
+            double error = Abs(meanHalton - meanLatticeRule);
             return ((meanHalton + meanLatticeRule)*0.5*V, error);
         }
 
         // Implements Monte-Carlo integration using recursive stratified sampling.
-        public static double IntegrateRSS()
+        public static (double, double) IntegrateRSS(Func<Vector, double> f, Vector a, Vector b, int N)
         {
-            return 0.0;
+            // If input vectors a and b representing lower/upper limits of multi-dimensional array were not equal throw an exception.
+            if (a.Length != b.Length)
+            {
+                throw new ArgumentException("Input vectors a and b representing lower/upper limits of multi-dimensional array were not equal", $"Length(a) = {a.Length} and Length(b) = {b.Length}");
+            }
+
+            // Variables.
+            int nMin = 200;
+            int d = a.Length;
+
+            // Check if current number of points N is less than specified nMin.
+            if (N < nMin)
+            {
+                return MonteCarloIntegrator.IntegratePlain(f, a, b, N);
+            }
+            else
+            {
+                // Find dimension with largest sub-variance.
+                double[] largestSubVariances = new double[2] {0.0, 0.0};
+                int index = 0;
+                Vector aUpdated = new Vector(d);
+                Vector bUpdated = new Vector(d);
+                for (int i = 0; i < d; i++)
+                {
+                    // Compute sub-variance for "right" sub-dimension.
+                    aUpdated = a.Copy();
+                    aUpdated[i] = (b[i] + a[i])/2;
+                    (double subIntegralRight, double subVarianceRight) = MonteCarloIntegrator.IntegratePlain(f, aUpdated, b, nMin);
+
+                    // Compute sub-variance for "left" sub-dimension.
+                    bUpdated = b.Copy();
+                    bUpdated[i] = (b[i] + a[i])/2;
+                    (double subIntegralLeft, double subVarianceLeft) = MonteCarloIntegrator.IntegratePlain(f, a, bUpdated, nMin);
+
+                    // Update values of sub-variance if this dimension has larger sub-variance than any previous one. Update the index as well.
+                    if (Max(subVarianceLeft, subVarianceRight) > largestSubVariances[0] && Max(subVarianceLeft, subVarianceRight) > largestSubVariances[1])
+                    {
+                        largestSubVariances[0] = subVarianceLeft;
+                        largestSubVariances[1] = subVarianceRight;
+                        index = i;
+                    }
+                }
+
+                // Compute proportionality of subdivision along this dimension.
+                int nLeft = (int) Round(N * largestSubVariances[0]/(largestSubVariances[0] + largestSubVariances[1]));
+                int nRight = N - nLeft;
+
+                // Compute integrals.
+                (double integralLeft, double varianceLeft) = IntegrateRSS(f, a, bUpdated, nLeft);
+                (double integralRight, double varianceRight) = IntegrateRSS(f, aUpdated, b, nRight);
+
+                // Return sum of integrals and corresponding error.
+                return (integralLeft + integralRight, Sqrt(Pow(varianceLeft, 2) + Pow(varianceRight, 2)));
+            }
         }
 
         // Implementation of some Quasi-Random sequences.
@@ -139,9 +203,19 @@ namespace Calculus
             }
             return q;
         }
-        private static Vector QuasiRandomSequenceLatticeRule(int dim)
+        private static Vector QuasiRandomSequenceLatticeRule(int n, int dim, Vector alpha)
         {
-            return new Vector(dim);
+            // Initialize memory.
+            Vector x = new Vector(dim);
+
+            // Construct Quasi-Random vector.
+            for (int i = 0; i < dim; i++)
+            {
+                x[i] = n*alpha[i] - Truncate(n*alpha[i]);
+            }
+
+            // Return result.
+            return x;
         }
     }
 }
