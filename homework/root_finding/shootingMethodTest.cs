@@ -56,7 +56,7 @@ class Program
     public static void Main()
     {
         // Variables.
-        double eps = 0.05;
+        double eps = 0.01;
         double rMax = 8;
         double rMin = 0.1;
         double analyticGSE = -0.5;
@@ -65,21 +65,21 @@ class Program
         GenericList<Vector> yList = new GenericList<Vector>();
 
         // Find ground state energy.
-        double currentEnergyGuess = - 0.6;
-        double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax);}, currentEnergyGuess, eps);
-        WriteLine($"#Numerical GSE = {numericalGSE}\n#");
+        double energyGuess = - 0.5;
+        double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax);}, energyGuess, eps);
+        WriteLine($"#Numerical GSE = {numericalGSE}, Analytical GSE = {analyticGSE}\n#");
 
         // If numericalGSE is close to analyticGSE save results.
         if (Abs(numericalGSE - analyticGSE) < eps)
         {
             // Compute corresponding wave function.
             Vector initialData = new Vector($"{rMin - Pow(rMin, 2)}\n{1 - 2*rMin}");
-            Func<double, Vector, Vector> function = delegate(double r, Vector y) {return new Vector($"{y[1]}\n{-0.5*(1/r + numericalGSE)*y[0]}");};
+            Func<double, Vector, Vector> function = delegate(double r, Vector y) {return new Vector($"{y[1]}\n{-2*(1/r + numericalGSE)*y[0]}");};
             ODE ode = new ODE(function, rMin, initialData);
             Vector yAtrMax = ode.Driver(rMax, rList, yList);
 
             // Output results to standard output stream.
-            WriteLine("#r,numericalGSE,analyticGSE");
+            WriteLine("#r,numericalWF,analyticWF");
             for (int i = 0; i < rList.Length; i++)
             {
                 WriteLine($"{rList[i]},{yList[i][0]},{analyticWF(rList[i])}");
@@ -95,14 +95,14 @@ class Program
         We have
                   -(1/2)f'' -(1/r)f = Ef     and     f(rMin) = rMin - rMin^2.
         Let y0 = f and y1 = f'. Then we get the following equations,
-                        y0' = y1     and     y1' = -(1/2)*(1/r + E)*y0,
+                        y0' = y1     and     y1' = -2*(1/r + E)*y0,
         and initial data,
                    y0(rMin) = rMin - rMin^2     and     y1(rMin) = 1 - 2rMin.
         */
 
         // Variables.
         Vector initialData = new Vector($"{rMin - Pow(rMin, 2)}\n{1 - 2*rMin}");
-        Func<double, Vector, Vector> function = delegate(double r, Vector y) {return new Vector($"{y[1]}\n{-0.5*(1/r + E)*y[0]}");};
+        Func<double, Vector, Vector> function = delegate(double r, Vector y) {return new Vector($"{y[1]}\n{-2*(1/r + E)*y[0]}");};
 
         // Make instance of ODE class.
         ODE ode = new ODE(function, rMin, initialData);

@@ -1,0 +1,6 @@
+# This file contains data regarding convergence of GSE of radial s-wave solution to SE of H-atom.
+# Parameters are absolute error of ODE integrator (accODE), relative error of ODE 
+# integrator (epsODE), and integration limits of ODE integrator rMin and rMax.
+# Their default values are: accODE = 0.01, epsODE = 0.01, rMin = 0.1 and rMax = 8.
+In this file the parameter  is varied with the others kept constant at their default values.
+#
