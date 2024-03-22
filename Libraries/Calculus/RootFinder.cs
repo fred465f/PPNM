@@ -45,7 +45,7 @@ namespace Calculus
                 // Find optimal lambda in x --> x + xDelta*lambda.
                 lambda = 1.0;
                 Vector xUpdated = x + xDelta * lambda;
-                while (Vector.Norm(f(xUpdated)) > (1 - lambda/2.0) * Vector.Norm(fx) || lambda >= 1.0/1024.0)
+                while (Vector.Norm(f(xUpdated)) > (1 - lambda/2.0) * Vector.Norm(fx) && lambda >= 1.0/1024.0)
                 {
                     // Update lambda and xUpdated
                     lambda /= 2.0;
@@ -57,7 +57,7 @@ namespace Calculus
 
                 // Increase number of steps performed.
                 numSteps += 1;
-            } while (Vector.Norm(f(x)) > eps || numSteps < 10000 || Vector.Norm(xDelta) > Vector.Norm(dx));
+            } while (Vector.Norm(f(x)) > eps && numSteps < 10000 && Vector.Norm(xDelta) > Vector.Norm(dx));
 
             // Return result.
             return x;

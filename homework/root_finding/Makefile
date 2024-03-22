@@ -17,7 +17,7 @@ Out.shootingMethodTest.gnuplot.svg : Out.shootingMethodTestData.txt Makefile
 		set key box width -2 height 1 font ", 14" at screen 0.9, 0.82;\
 		set grid ;\
 		f(x) = 0 ;\
-		plot "$<" using 1:2 with lines lw 2 lc rgb "#0308B494F" notitle "Numerical", \
+		plot "$<" using 1:2 with lines lw 2 lc rgb "#0308B494F" title "Numerical", \
 		"$<" using 1:3 with lines lw 2 lc rgb "#E03D4B" title "Analytical", \
 		f(x) with lines lw 2 lc rgb "#050000000" dashtype 2 notitle ;\
 	' | gnuplot

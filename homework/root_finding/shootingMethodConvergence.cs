@@ -15,11 +15,11 @@ class Program
     public static void Main(string[] args)
     {
         // Variables. (default values of input parameters)
-        double eps = 0.01;
-        double accODE = 0.01;
-        double epsODE = 0.01;
-        double rMax = 8;
-        double rMin = 0.1;
+        double eps = 0.001;
+        double accODE = 0.001;
+        double epsODE = 0.001;
+        double rMax = 14;
+        double rMin = 0.001;
         double energyGuess = - 0.5;
         int numPoints = 5;
 
@@ -30,7 +30,7 @@ class Program
         WriteLine("# File is structured such that every two columns fit together, with first one containing values of parameters varied and second one GSE.\n#");
 
         // Vary accODE and save results.
-        double[] accODEs = new double[] {0.1, 0.08, 0.04, 0.02, 0.001};
+        double[] accODEs = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
         double[] accODEsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
@@ -39,7 +39,7 @@ class Program
         }
 
         // Vary epsODE and save results.
-        double[] epsODEs = new double[] {0.1, 0.08, 0.06, 0.04, 0.02};
+        double[] epsODEs = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
         double[] epsODEsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
@@ -48,7 +48,7 @@ class Program
         }
 
         // Vary rMin and save results.
-        double[] rMins = new double[] {0.1, 0.08, 0.04, 0.02, 0.001};
+        double[] rMins = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
         double[] rMinsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
@@ -57,7 +57,7 @@ class Program
         }
 
         // Vary rMax and save results.
-        double[] rMaxs = new double[] {8, 9, 10, 11, 12};
+        double[] rMaxs = new double[] {10, 11, 12, 13, 14};
         double[] rMaxsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
