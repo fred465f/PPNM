@@ -6,7 +6,7 @@ LIBSPATH2 = ../../Libraries/Calculus/
 LIBSPATH3 = ../../Libraries/DataStructures/
 
 # Images.
-Out.shootingMethodTest.gnuplot.svg : Out.shootingMethodTestData.txt Makefile
+Out.shootingMethodTest.gnuplot.svg : Out.shootingMethodTestData.txt
 	echo ' \
 		set terminal svg background "white" ;\
 		set out "$@" ;\
@@ -21,7 +21,7 @@ Out.shootingMethodTest.gnuplot.svg : Out.shootingMethodTestData.txt Makefile
 		"$<" using 1:3 with lines lw 2 lc rgb "#E03D4B" title "Analytical", \
 		f(x) with lines lw 2 lc rgb "#050000000" dashtype 2 notitle ;\
 	' | gnuplot
-Out.shootingMethodConvergenceAcc.gnuplot.svg : Out.shootingMethodConvergenceData.txt Makefile
+Out.shootingMethodConvergenceAcc.gnuplot.svg : Out.shootingMethodConvergenceData.txt
 	echo ' \
 		set terminal svg background "white" ;\
 		set out "$@" ;\
@@ -32,7 +32,7 @@ Out.shootingMethodConvergenceAcc.gnuplot.svg : Out.shootingMethodConvergenceData
 		f(x) = 0 ;\
 		plot "$<" using 1:2 with lines lw 2 lc rgb "#0308B494F" notitle ;\
 	' | gnuplot
-Out.shootingMethodConvergenceEps.gnuplot.svg : Out.shootingMethodConvergenceData.txt Makefile
+Out.shootingMethodConvergenceEps.gnuplot.svg : Out.shootingMethodConvergenceData.txt
 	echo ' \
 		set terminal svg background "white" ;\
 		set out "$@" ;\
@@ -43,7 +43,7 @@ Out.shootingMethodConvergenceEps.gnuplot.svg : Out.shootingMethodConvergenceData
 		f(x) = 0 ;\
 		plot "$<" using 3:4 with lines lw 2 lc rgb "#0308B494F" notitle ;\
 	' | gnuplot
-Out.shootingMethodConvergenceRmin.gnuplot.svg : Out.shootingMethodConvergenceData.txt Makefile
+Out.shootingMethodConvergenceRmin.gnuplot.svg : Out.shootingMethodConvergenceData.txt
 	echo ' \
 		set terminal svg background "white" ;\
 		set out "$@" ;\
@@ -54,7 +54,7 @@ Out.shootingMethodConvergenceRmin.gnuplot.svg : Out.shootingMethodConvergenceDat
 		f(x) = 0 ;\
 		plot "$<" using 5:6 with lines lw 2 lc rgb "#0308B494F" notitle ;\
 	' | gnuplot
-Out.shootingMethodConvergenceRmax.gnuplot.svg : Out.shootingMethodConvergenceData.txt Makefile
+Out.shootingMethodConvergenceRmax.gnuplot.svg : Out.shootingMethodConvergenceData.txt
 	echo ' \
 		set terminal svg background "white" ;\
 		set out "$@" ;\

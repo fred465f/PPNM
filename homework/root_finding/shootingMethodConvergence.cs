@@ -18,10 +18,10 @@ class Program
         double eps = 0.001;
         double accODE = 0.001;
         double epsODE = 0.001;
-        double rMax = 14;
+        double rMax = 12;
         double rMin = 0.001;
-        double energyGuess = - 0.5;
-        int numPoints = 5;
+        double energyGuess = - 0.6;
+        int numPoints = 50;
 
         // Add heading of file explaining file structure.
         WriteLine("# This file contains data regarding convergence of GSE of radial s-wave solution to SE of H-atom.");
@@ -30,38 +30,50 @@ class Program
         WriteLine("# File is structured such that every two columns fit together, with first one containing values of parameters varied and second one GSE.\n#");
 
         // Vary accODE and save results.
-        double[] accODEs = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
+        double[] accRange = new double[2] {0.001, 0.1};
+        double[] accODEs = new double[numPoints];
         double[] accODEsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax, accODEs[i], epsODE);}, energyGuess, eps);
+            double currentAccODE = (accRange[1] - accRange[0])/(numPoints - 1) * i + accRange[0];
+            accODEs[i] = currentAccODE;
+            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax, currentAccODE, epsODE);}, energyGuess, eps);
             accODEsGSE[i] = numericalGSE;
         }
 
         // Vary epsODE and save results.
-        double[] epsODEs = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
+        double[] epsRange = new double[2] {0.001, 0.1};
+        double[] epsODEs = new double[numPoints];
         double[] epsODEsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax, accODE, epsODEs[i]);}, energyGuess, eps);
+            double currentEpsODE = (epsRange[1] - epsRange[0])/(numPoints - 1) * i + epsRange[0];
+            epsODEs[i] = currentEpsODE;
+            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMax, accODE, currentEpsODE);}, energyGuess, eps);
             epsODEsGSE[i] = numericalGSE;
         }
 
         // Vary rMin and save results.
-        double[] rMins = new double[] {0.01, 0.008, 0.006, 0.004, 0.002};
+        double[] rMinRange = new double[2] {0.01, 0.5};
+        double[] rMins = new double[numPoints];
         double[] rMinsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMins[i], rMax, accODE, epsODE);}, energyGuess, eps);
+            double currentRMin = (rMinRange[1] - rMinRange[0]) / (numPoints - 1) * i + rMinRange[0];
+            rMins[i] = currentRMin;
+            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, currentRMin, rMax, accODE, epsODE);}, energyGuess, eps);
             rMinsGSE[i] = numericalGSE;
         }
 
         // Vary rMax and save results.
-        double[] rMaxs = new double[] {10, 11, 12, 13, 14};
+        double[] rMaxRange = new double[2] {5, 15};
+        double[] rMaxs = new double[numPoints];
         double[] rMaxsGSE = new double[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, rMaxs[i], accODE, epsODE);}, energyGuess, eps);
+            double currentRMax = (rMaxRange[1] - rMaxRange[0]) / (numPoints - 1) * i + rMaxRange[0];
+            rMaxs[i] = currentRMax;
+            double numericalGSE = RootFinder.Newton(delegate(double E) {return M(E, rMin, currentRMax, accODE, epsODE);}, energyGuess, eps);
             rMaxsGSE[i] = numericalGSE;
         }
 
