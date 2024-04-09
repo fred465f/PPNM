@@ -1,0 +1,15 @@
+----- Part A -----
+
+Minima were found for the two listed functions in the code using Quasi-Newton method, Rosenbrocks Valley function and Himmelblaus function.
+These numerically computed minima are compared to the analytically computed ones:
+
+1.00000599594239 
+1.00001201989623 
+(1) Approved.
+(2) Approved.
+
+Minima were found for the two listed functions in the code using Downhill Simplex method, Rosenbrocks Valley function and Himmelblaus function.
+These numerically computed minima are compared to the analytically computed ones:
+
+(1) Approved.
+(2) Approved.

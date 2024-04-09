@@ -75,5 +75,16 @@ namespace DataStructures
             _length -= 1;
             _availableSpace += 1;
         }
+
+        // Method copies content of GenericList instance into another instance.
+        public GenericList<T> Copy()
+        {
+            GenericList<T> copy = new GenericList<T>();
+            for (int i = 0; i < this.Length; i++)
+            {
+                copy.Add(this[i]);
+            }
+            return copy;
+        }
     }
 }

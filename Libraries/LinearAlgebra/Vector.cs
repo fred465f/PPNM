@@ -257,6 +257,27 @@ namespace LinearAlgebra
         }
         public static double Norm(Vector v) => Sqrt(InnerProduct(v, v));
 
+		// Outer product.
+		public static Matrix OuterProduct(Vector v, Vector w)
+		{
+			if (v.NumCols != w.NumCols)
+			{
+				throw new ArgumentException("Input vectors needs to be inputted both as column vectors", $"({v.NumRows}, {v.NumCols}) and ({w.NumRows}, {w.NumCols})");
+			}
+			else
+			{
+				Matrix outerProduct = new Matrix(w.Length, v.Length);
+				for (int i = 0; i < w.Length; i++)
+				{
+					for (int j = 0; j < v.Length; j++)
+					{
+						outerProduct[i, j] = v[j] * w[i];
+					}
+				}
+				return outerProduct;
+			}
+		}
+
 		// Method to apply transformation to all entries of vector using input delegate.
 		public Vector Apply(Func<double, double> transformation)
 		{
