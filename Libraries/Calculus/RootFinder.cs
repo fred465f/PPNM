@@ -12,7 +12,7 @@ namespace Calculus
     public static class RootFinder
     {
         // Newton's method.
-        public static Vector Newton(Func<Vector, Vector> f, Vector x, double eps)
+        public static Vector Newton(Func<Vector, Vector> f, Vector x, double eps, string lineSearchType = "simple")
         {
             // Variables.
             int n = x.Length;
@@ -43,17 +43,40 @@ namespace Calculus
                 xDelta = qrgs.SolveLinearEq(-fx);
 
                 // Find optimal lambda in x --> x + xDelta*lambda.
-                lambda = 1.0;
-                Vector xUpdated = x + xDelta * lambda;
-                while (Vector.Norm(f(xUpdated)) > (1 - lambda/2.0) * Vector.Norm(fx) && lambda >= 1.0/1024.0)
+                if (lineSearchType == "simple")
                 {
-                    // Update lambda and xUpdated
-                    lambda /= 2.0;
-                    xUpdated = x + xDelta * lambda;
-                }
+                    // Variables.
+                    lambda = 1.0;
+                    Vector xUpdated = x + xDelta * lambda;
 
-                // Update x according to x --> x + xDelta*lambda.
-                x = xUpdated;
+                    // Find optimal lambda.
+                    while (Vector.Norm(f(xUpdated)) > (1 - lambda/2.0) * Vector.Norm(fx) && lambda >= 1.0/1024.0)
+                    {
+                        // Update lambda and xUpdated
+                        lambda /= 2.0;
+                        xUpdated = x + xDelta * lambda;
+                    }
+
+                    // Update x according to x --> x + xDelta*lambda.
+                    x = xUpdated;
+                }
+                else if (lineSearchType == "quadratic interpolation")
+                {
+                    // Variables.
+                    lambda = 1.0;
+                    Vector xUpdated = x + xDelta * lambda;
+
+                    // Find optimal lambda.
+                    while (Vector.Norm(f(xUpdated)) > (1 - lambda/2.0) * Vector.Norm(fx) && lambda >= 1.0/1024.0)
+                    {
+                        // Update lambda and xUpdated
+                        lambda /= 2.0;
+                        xUpdated = x + xDelta * lambda;
+                    }
+
+                    // Update x according to x --> x + xDelta*lambda.
+                    x = xUpdated;
+                }
 
                 // Increase number of steps performed.
                 numSteps += 1;

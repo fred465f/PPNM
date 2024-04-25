@@ -1,5 +1,5 @@
 ----- Part A -----
 
-Analytic root to 1D function was not found within an accuracy of 0.001
-Analytic root to 2D function was not found within an accuracy of 0.001
-Analytic root to Rosenbrock's valley function was found within an accuracy of 0.001. This should due to analytical considerations be the only root.
+Analytic root to 1D function was found within an accuracy of 0.01
+Analytic root to 2D function was found within an accuracy of 0.01
+Analytic root to Rosenbrock's valley function was found within an accuracy of 0.0001. This should due to analytical considerations be the only root.

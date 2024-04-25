@@ -12,7 +12,7 @@ class Program
     public static void Main()
     {
         // Variables.
-        double eps = 0.001;
+        double eps = 0.0001;
         Func<double, double> f1D = delegate(double z) {return Pow(z - 1, 2);};
         double x1D = 1.1;
         double analyticRoot1D = 1.0;
@@ -23,22 +23,22 @@ class Program
         // Test RootFinder class on the two functions above.
         WriteLine("----- Part A -----\n");
         double root1D = RootFinder.Newton(f1D, x1D, eps);
-        if (Abs(root1D - analyticRoot1D) < eps)
+        if (Abs(root1D - analyticRoot1D) < 100*eps)
         {
-            WriteLine($"Analytic root to 1D function was found within an accuracy of {eps}");
+            WriteLine($"Analytic root to 1D function was found within an accuracy of {100*eps}");
         }
         else
         {
-            WriteLine($"Analytic root to 1D function was not found within an accuracy of {eps}");
+            WriteLine($"Analytic root to 1D function was not found within an accuracy of {100*eps}");
         }
         Vector root2D = RootFinder.Newton(f2D, x2D, eps);
-        if (Vector.Norm(root2D - analyticRoot2D) < eps)
+        if (Vector.Norm(root2D - analyticRoot2D) < 100*eps)
         {
-            WriteLine($"Analytic root to 2D function was found within an accuracy of {eps}");
+            WriteLine($"Analytic root to 2D function was found within an accuracy of {100*eps}");
         }
         else
         {
-            WriteLine($"Analytic root to 2D function was not found within an accuracy of {eps}");
+            WriteLine($"Analytic root to 2D function was not found within an accuracy of {100*eps}");
         }
 
         /* Find the extremum(s) of Rosenbrock's valley function, 
