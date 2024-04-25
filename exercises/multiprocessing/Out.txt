@@ -1,20 +1,20 @@
 ----- Using 1 threads -----
-real 0.30
+real 0.29
 user 0.23
 sys 0.00
 ----- Using 2 threads -----
-real 0.33
-user 0.51
+real 0.29
+user 0.38
 sys 0.00
 ----- Using 3 threads -----
-real 0.27
-user 0.45
-sys 0.02
+real 0.23
+user 0.39
+sys 0.00
 ----- Using 4 threads -----
 real 0.25
-user 0.67
+user 0.69
 sys 0.00
 ----- Using .net parallel loops -----
-real 0.75
-user 7.38
+real 0.67
+user 6.62
 sys 0.00

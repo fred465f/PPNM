@@ -1,4 +1,5 @@
-/* */
+/* Minimization class in MachineLearning namespace implements Quasi-Newton method with numerical gradient, 
+back-tracking linesearch, and rank-1 update as well as the downhill simplex method. */
 
 using System;
 using LinearAlgebra;
