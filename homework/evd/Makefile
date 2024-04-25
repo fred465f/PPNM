@@ -56,36 +56,48 @@ Out.waveVectors.gnuplot.png : Out.numericalWaveFunctionsData.txt Out.analyticalW
 		' | gnuplot
 Out.resources.gnuplot.png : Out.resourcesData.txt
 	echo '\
-			set terminal png background "white" ;\
+			set terminal pngcairo background "white" ;\
 			set out "$@" ;\
 			set xlabel "Size of square matrix" ;\
 			set ylabel "Diagonalization. runtime (s)" ;\
 			set grid ;\
+			set key box top left width 1 height 1  ;\
 			set title "Diagonalization runtime vs. square matrix size" ;\
 			f(x) = b + (x/a)**c ;\
 			b = 1; a = 90; c = 3 ;\
 			fit f(x) "$<" via a, b ;\
-			plot "$<" with lines lw 3 linecolor rgb "#F05D5A" title "Data", \
-					f(x) with lines lw 3 linecolor rgb "#3F9EEB" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
+			plot "$<" with lines lw 3 linecolor rgb "#4BB3E1" title "Data", \
+					f(x) with lines lw 3 dashtype 2 linecolor rgb "#050DE1435" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
 		' | gnuplot
 
 # Data.
 Out.rMaxConvergenceData.txt : convergence.exe
+	for rMax in $$(seq 3 0.35 10); do \
+		mono $< -rMax:$$rMax -dr:0.3 -test:rMax >> log.$$rMax & \
+	done; wait
 	> $@
 	for rMax in $$(seq 3 0.35 10); do \
-		mono $< -rMax:$$rMax -dr:0.3 -test:rMax >> $@; \
+		cat log.$$rMax >> $@; \
 	done
+	$(RM) log.*
 Out.drConvergenceData.txt : convergence.exe
+	for dr in $$(seq 0.05 0.05 0.5); do \
+		mono $< -rMax:14 -dr:$$dr -test:dr >> log.$$dr & \
+	done; wait
 	> $@
 	for dr in $$(seq 0.05 0.05 0.5); do \
-		mono $< -rMax:14 -dr:$$dr -test:dr >> $@; \
+		cat log.$$dr >> $@; \
 	done
+	$(RM) log.*
 Out.resourcesData.txt : resources.exe
+	for N in $$(seq 100 5 300); do \
+		time -ao log.$$N -f "$$N %e" mono $< -size:$$N & \
+	done; wait
 	>$@
 	for N in $$(seq 100 5 300); do \
-		time --format "$$N %e" --output $@ --append \
-		mono $< -size:$$N;\
+		cat log.$$N >> $@; \
 	done
+	$(RM) log.*
 Out.numericalWaveFunctionsData.txt : numericalWaveFunctions.exe
 	mono $< -rMax:14 -dr:0.3 -outFile:$@
 Out.analyticalWaveFunctionsData.txt : analyticalWaveFunctions.exe
