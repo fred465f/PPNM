@@ -1,4 +1,4 @@
-/* Program test CubicSpline class by producing data for later plotting. */
+/* Program test QuadraticSpline class by producing data for later plotting. */
 
 using System;
 using LinearAlgebra;
@@ -31,8 +31,8 @@ class Program
         }
         Vector yValues = Vector.RandomVector(numRandomPoints);
 
-        // Create natural cubic spline.
-        CubicSpline cubicSpline = new CubicSpline(xValues, yValues);
+        // Create natural quadratic spline.
+        QuadraticSpline quadraticSpline = new QuadraticSpline(xValues, yValues);
 
         // Write random data to outFile.
         using (var outStream = new System.IO.StreamWriter(outFile, append:false))
@@ -52,7 +52,7 @@ class Program
         for (int i = 0; i < numInterpolationPoints; i++)
         {
             double xValueCurrent = xRange[0] + dx * i;
-            WriteLine($"{xValueCurrent},{cubicSpline.Interpolate(xValueCurrent)},{cubicSpline.Integrate(xValueCurrent)},{cubicSpline.Derivative(xValueCurrent)}");
+            WriteLine($"{xValueCurrent},{quadraticSpline.Interpolate(xValueCurrent)},{quadraticSpline.Integrate(xValueCurrent)},{quadraticSpline.Derivative(xValueCurrent)}");
         }
     }
 }

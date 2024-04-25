@@ -13,9 +13,11 @@ Out.testErrorFunction.gnuplot.svg : Out.testErrorFunctionData.txt
 			set xlabel "x" font ", 14" ;\
 			set ylabel "erf(x)" font ", 14" ;\
 			set grid ;\
+			set key box top left width -12 height 1 ;\
 			set yrange [-1.1: 1.1] ;\
 			set xrange [-3.3: 3.3] ;\
-			plot "$<" with lines lw 2 lc rgb "red" notitle ;\
+			plot "$<" with lines lw 2 lc rgb "red" title "erf(x) values from adaptve integrator", \
+			"In.errorFunctionData.txt" lt 7 lc rgb "#050000000" title "erf(x) values from Wikipedia" ;\
 		' | gnuplot
 
 # Data.

@@ -66,8 +66,6 @@ namespace Calculus
             double tolerance = acc + eps * Abs(Q);
             double error = Abs(Q - q);
 
-            // Increase number of steps used by one
-
             // Check if the error performed is smaller than given tolerance.
             if (error < tolerance)
             {

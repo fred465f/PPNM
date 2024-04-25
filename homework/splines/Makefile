@@ -1,4 +1,4 @@
-all: Out.linearSpline.gnuplot.svg Out.cubicSpline.gnuplot.svg Out.quadraticSplineTestResults.txt Out.tridiagonalSolverTestResults.txt
+all: Out.linearSpline.gnuplot.svg Out.quadraticSpline.gnuplot.svg Out.cubicSpline.gnuplot.svg Out.quadraticSplineTestResults.txt Out.tridiagonalSolverTestResults.txt
 
 # Path to external self-made libraries.
 LIBSPATH = ../../Libraries/LinearAlgebra/
@@ -23,6 +23,20 @@ Out.linearSpline.gnuplot.svg : Out.linearSplineData.txt
 				g(x) with lines lw 2 lc 0 dashtype 2 notitle, \
 				"In.linearSplineData.txt" lt 7 lc rgb "#EB472D" title "Data: f(x) = 4 - x^2" ;\
 		' | gnuplot
+Out.quadraticSpline.gnuplot.svg : Out.quadraticSplineData.txt
+	echo ' \
+			set terminal svg background "white" ;\
+			set out "$@" ;\
+			set datafile separator "," ;\
+			set xlabel "x" font ", 14" ;\
+			set ylabel "y" font ", 14" ;\
+			set title "Test of QuadraticSpline class" font ", 14" ;\
+			set grid ;\
+			set key box height 1 width -4 font ", 14" at screen 0.71, 0.33 ;\
+			set yrange [-0.65: 1.2] ;\
+			plot "$<" with lines lw 2 lc rgb "#EB8628" title "Cubic splines", \
+				"Out.randomDataSetQuadratic.txt" lt 7 lc rgb "#EB472D" title "Random data points" ;\
+		' | gnuplot
 Out.cubicSpline.gnuplot.svg : Out.cubicSplineData.txt
 	echo ' \
 			set terminal svg background "white" ;\
@@ -35,18 +49,20 @@ Out.cubicSpline.gnuplot.svg : Out.cubicSplineData.txt
 			set key box height 1 width -4 font ", 14" at screen 0.71, 0.33 ;\
 			set yrange [-0.5: 1.2] ;\
 			plot "$<" with lines lw 2 lc rgb "#EB8628" title "Cubic splines", \
-				"Out.randomDataSet.txt" smooth csplines with lines lw 2 lc rgb "#1254582DE" dashtype 7 title "Gnuplots csplines", \
-				"Out.randomDataSet.txt" lt 7 lc rgb "#EB472D" title "Random data points" ;\
+				"Out.randomDataSetCubic.txt" smooth csplines with lines lw 2 lc rgb "#1254582DE" dashtype 7 title "Gnuplots csplines", \
+				"Out.randomDataSetCubic.txt" lt 7 lc rgb "#EB472D" title "Random data points" ;\
 		' | gnuplot
 
 # Data
 Out.linearSplineData.txt : testLinearSpline.exe
 	mono $< -inFile:In.linearSplineData.txt > $@
+Out.quadraticSplineData.txt : testQuadraticSpline2.exe
+	mono $< -outFile:Out.randomDataSetQuadratic.txt > $@
 Out.cubicSplineData.txt : testCubicSpline.exe
-	mono $< -outFile:Out.randomDataSet.txt > $@
+	mono $< -outFile:Out.randomDataSetCubic.txt > $@
 
 # Main output to commandline
-Out.quadraticSplineTestResults.txt : testQuadraticSpline.exe
+Out.quadraticSplineTestResults.txt : testQuadraticSpline1.exe
 	mono $< > $@
 Out.tridiagonalSolverTestResults.txt : testTridiagonalSolver.exe
 	mono $< > $@
@@ -54,7 +70,9 @@ Out.tridiagonalSolverTestResults.txt : testTridiagonalSolver.exe
 # Executables.
 testLinearSpline.exe : testLinearSpline.cs LinearAlgebra.dll
 	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
-testQuadraticSpline.exe : testQuadraticSpline.cs LinearAlgebra.dll
+testQuadraticSpline1.exe : testQuadraticSpline1.cs LinearAlgebra.dll
+	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
+testQuadraticSpline2.exe : testQuadraticSpline2.cs LinearAlgebra.dll
 	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<
 testCubicSpline.exe : testCubicSpline.cs LinearAlgebra.dll
 	mcs -target:exe -reference:LinearAlgebra.dll -out:$@ $<

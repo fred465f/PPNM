@@ -1,16 +1,16 @@
 ----- Part A -----
 
-First integral was computed successfully within specified accuracy of 0.0001 in 18 steps
-Second integral was computed successfully within specified accuracy of 0.0001 in 8568 steps
-Third integral was computed successfully within specified accuracy of 0.0001 in 38 steps
-Fourth integral was computed successfully within specified accuracy of 0.0001 in 14984 steps
+First integral was computed successfully within specified accuracy of 0.0001 in 36 steps
+Second integral was computed successfully within specified accuracy of 0.0001 in 17136 steps
+Third integral was computed successfully within specified accuracy of 0.0001 in 76 steps
+Fourth integral was computed successfully within specified accuracy of 0.0001 in 29968 steps
 
 ----- Part B -----
 
-First integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform in 24 steps
-Second integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform in 134 steps
+First integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform in 48 steps
+Second integral was computed successfully within specified accuracy of 0.0001 using Clenshaw-Curtis variable transform in 268 steps
 
 ----- Part C -----
 
-First improper integral was computed successfully within specified accuracy of 0.0001 in 42 steps
-Second improper integral was computed successfully within specified accuracy of 0.0001 in 14 steps
+First improper integral was computed successfully within specified accuracy of 0.0001 in 84 steps
+Second improper integral was computed successfully within specified accuracy of 0.0001 in 28 steps
