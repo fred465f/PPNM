@@ -11,6 +11,57 @@ namespace MachineLearning
 {
     public static class Minimization
     {
+        // Implements Newton method with numerical gradient, numerical Hessian matrix and back-tracking linesearch.
+        public static Vector Newton(Func<Vector, double> f, Vector start, double acc)
+        {
+            // Variables
+            int n = start.Length;
+            Vector x = start.Copy();
+            int numOfIterations = 0;
+
+            // Newtons iterations.
+            do
+            {
+                // Compute gradient of objective function at current x.
+                Vector fGrad = Grad(f, x);
+
+                // If desired accuracy is reached, we are done. Break anyways if convergence criteria is not met after some time.
+                if (Vector.Norm(fGrad) < acc || numOfIterations > 10000)
+                {
+                    break;
+                }
+
+                // Compute Hessian matrix and newton step.
+                Matrix hessian = Hessian(f, x);
+                QRGS qrgs = new QRGS(hessian);
+                Vector dx = qrgs.SolveLinearEq(-fGrad);
+
+                // Do linesearch starting with lambda = 1.
+                double lambda = 1.0;
+                double fx = f(x);
+                while (true)
+                {
+                    // Break if the step is good, first condition, or if lambda gets too small, second condition.
+                    if (f(x + lambda*dx) < fx || lambda < 1.0/1024.0)
+                    {
+                        break;
+                    }
+
+                    // Update lambda and try again.
+                    lambda /= 2.0;
+                }
+
+                // Perform Newtons step.
+                x += lambda*dx;
+
+                // Update number of iterations performed.
+                numOfIterations += 1;
+            } while(true);
+
+            // Return result.
+            return x;
+        }
+        
         // Implements Quasi-Newton method with numerical gradient, back-tracking linesearch, and rank-1 update.
         public static Vector QuasiNewton(Func<Vector, double> f, Vector start, double acc)
         {
@@ -195,24 +246,48 @@ namespace MachineLearning
             return simplex[lowestIndex];
         }
 
-        // Method computes numerical gradient of input real-valued function at input point.
+        // Method computes numerical gradient of input real-valued function at input point using forward differences.
         public static Vector Grad(Func<Vector, double> f, Vector x)
         {
             // Variables.
-            Vector dx = x.Apply(Abs) * Pow(2, -26);
-            double fx = f(x);
             Vector fGrad = new Vector(x.Length);
+            double fx = f(x);
 
             // Compute gradient.
             for (int j = 0; j < x.Length; j++)
             {
-                Vector xDisplaced = x.Copy();
-                xDisplaced[j] += dx[j];
-                fGrad[j] = (f(xDisplaced) - fx)/dx[j];
+                double dx = Max(Abs(x[j]), 1) * Pow(2, -26);
+                x[j] += dx;
+                fGrad[j] = (f(x) - fx)/dx;
+                x[j] -= dx;
             }
 
             // Return result.
             return fGrad;
+        }
+
+        // Method computes numerical Hessian matrix of input real-values function at input point using forward differences.
+        public static Matrix Hessian(Func<Vector, double> f, Vector x)
+        {
+            // Variables
+            Matrix Hessian = new Matrix(x.Length);
+            Vector fGrad = Grad(f, x);
+
+            // Compute Hessian.
+            for (int j = 0; j < x.Length; j++)
+            {
+                double dx = Max(Abs(x[j]), 1) * Pow(2, -13);
+                x[j] += dx;
+                Vector dfGrad = Grad(f, x) - fGrad;
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Hessian[i, j] = dfGrad[i] / dx;
+                }
+                x[j] -= dx;
+            }
+
+            // Return result.
+            return Hessian;
         }
 
         // Method computes a size measure for simplices. The radius, largest distance between a vertex and the center, is used as a size measure.

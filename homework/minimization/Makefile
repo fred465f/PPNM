@@ -1,4 +1,4 @@
-all : Out.testMinimization.txt Out.fitHiggsQuasiNewton.gnuplot.svg
+all : Out.testMinimization.txt Out.fitHiggsNewton.gnuplot.svg
 
 # Paths to self-made libraries.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
@@ -6,14 +6,14 @@ LIBSPATH2 = ../../Libraries/MachineLearning/
 LIBSPATH3 = ../../Libraries/DataStructures/
 
 # Images.
-Out.fitHiggsQuasiNewton.gnuplot.svg : Out.fitHiggsQuasiNewtonData.txt
+Out.fitHiggsNewton.gnuplot.svg : Out.fitHiggsNewtonData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
 			set datafile separator "," ;\
 			set xlabel "Energy (GeV)" font ", 14" ;\
 			set ylabel "Signal (certain units)" font ", 14" ;\
-			set title "Fit using Quasi-Newton minimization method" font ", 14" ;\
+			set title "Fit using Newton minimization method" font ", 14" ;\
 			set grid ;\
 			set key box height 1 width -9 font ", 14" at screen 0.92, 0.84 ;\
 			plot "$<" with lines lc 7 lw 2 title "Fit: Breit-Wigner function", \
@@ -21,7 +21,7 @@ Out.fitHiggsQuasiNewton.gnuplot.svg : Out.fitHiggsQuasiNewtonData.txt
 		' | gnuplot
 
 # Data.
-Out.fitHiggsQuasiNewtonData.txt : fitHiggsQuasiNewton.exe
+Out.fitHiggsNewtonData.txt : fitHiggsNewton.exe
 	mono $< < In.higgsData.txt > $@
 
 # Main commandline output.
@@ -31,7 +31,7 @@ Out.testMinimization.txt : testMinimization.exe
 # Executables.
 testMinimization.exe : testMinimization.cs Library.dll
 	mcs -target:exe -out:$@ -reference:Library.dll $<
-fitHiggsQuasiNewton.exe : fitHiggsQuasiNewton.cs Library.dll
+fitHiggsNewton.exe : fitHiggsNewton.cs Library.dll
 	mcs -target:exe -out:$@ -reference:Library.dll $<
 
 # Libraries.

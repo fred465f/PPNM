@@ -480,7 +480,7 @@
 	<path stroke='black'  d='M64.14,57.01 L64.14,422.40 L574.82,422.40 L574.82,57.01 L64.14,57.01 Z  '/></g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(319.48,31.56)" stroke="none" fill="black" font-family="Arial" font-size="14.00"  text-anchor="middle">
-		<text><tspan font-family="Arial" >Fit using Quasi-Newton minimization method</tspan></text>
+		<text><tspan font-family="Arial" >Fit using Newton minimization method</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
