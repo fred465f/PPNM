@@ -1,5 +1,6 @@
 /* Class SimpleNeuralNetwork in MachineLearning namespace implements a simple feed-forward
-artificial neural network, using Minimization class from same namespace. */
+artificial neural network with one hidden layer and Gaussian wavelet activation function, 
+using Minimization class from same namespace. */
 
 using System;
 using LinearAlgebra;
@@ -13,21 +14,22 @@ namespace MachineLearning
     {
         // Variables.
         int n;
-        Func<double, double> f;
+        Func<double, double> f = z => z * Exp(-Pow(z, 2));
+        Func<double, double> fDerivative = z => Exp(-Pow(z, 2)) - 2*Pow(z, 2)*Exp(-Pow(z, 2));
+        Func<double, double> fDoubleDerivative = z => -6*z*Exp(-Pow(z, 2)) + 4*Pow(z, 3)*Exp(-Pow(z, 2));
+        Func<double, double> fAntiDerivative = z => -0.5 * Exp(-Pow(z, 2));
         Vector p;
-        double quasiNewtonAcc = 0.0001;
+        double quasiNewtonAcc = 0.00001;
 
         // Constructors.
-        public SimpleNeuralNetwork(int numOfHiddenLayers, Func<double, double> activationFunction)
+        public SimpleNeuralNetwork(int numOfHiddenNeurons)
         {
-            n = numOfHiddenLayers;
-            f = activationFunction;
+            n = numOfHiddenNeurons;
             p = Vector.RandomVector(3*n);
         }
-        public SimpleNeuralNetwork(int numOfHiddenLayers, Func<double, double> activationFunction, Vector initialParameters)
+        public SimpleNeuralNetwork(int numOfHiddenNeurons, Vector initialParameters)
         {
-            n = numOfHiddenLayers;
-            f = activationFunction;
+            n = numOfHiddenNeurons;
             if (initialParameters.Length != 3*n)
             {
                 throw new ArgumentException("Wrong number of initial parameters for given network. There should be 3 * 'number of hidden neurons'", $"Length of p = {p.Length}");
@@ -65,15 +67,15 @@ namespace MachineLearning
             for (int i = 0; i < x.Length; i++)
             {
                 double prediction = 0;
-                for (int j = 0; j < this.n; i++)
+                for (int j = 0; j < this.n; j++)
                 {
-                    prediction += this.f((x[j] - parameters[j])/parameters[j + n]) * parameters[j + 2*n];
+                    prediction += this.f((x[i] - parameters[3*j])/parameters[3*j + 1]) * parameters[3*j + 2];
                 }
                 sum += Pow(prediction - y[i], 2);
             }
 
             // Return result.
-            return sum;
+            return sum / x.Length;
         }
 
         // Predict.
@@ -85,7 +87,55 @@ namespace MachineLearning
             // Compute prediction of network.
             for (int i = 0; i < this.n; i++)
             {
-                sum += this.f((x - p[i])/p[i + n]) * p[i + 2*n];
+                sum += this.f((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
+
+        // Derivative.
+        public double Derivative(double x)
+        {
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += (1/p[3*i + 1]) * this.fDerivative((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
+
+        // Double derivative.
+        public double DoubleDerivative(double x)
+        {
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += Pow(1/p[3*i + 1], 2) * this.fDoubleDerivative((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
+
+        // Anti-derivative.
+        public double AntiDerivative(double x)
+        {
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += p[3*i + 1] * this.fAntiDerivative((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
             }
 
             // Return result.

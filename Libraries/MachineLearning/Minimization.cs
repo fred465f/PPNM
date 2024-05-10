@@ -67,12 +67,13 @@ namespace MachineLearning
         {
             // Variables
             int n = start.Length;
+            int numOfIterations = 0;
             Vector x = start.Copy();
             Vector fGrad = Grad(f, x);
             Matrix inverseHessian = Matrix.Identity(n);
 
             // Iterate until norm of gradient of objective function f is less than desired accuracy.
-            while (Vector.Norm(fGrad) > acc)
+            while (Vector.Norm(fGrad) > acc && numOfIterations < 10000)
             {
                 // Compute Newton-step.
                 Vector xDelta = - inverseHessian * fGrad;
@@ -122,6 +123,9 @@ namespace MachineLearning
                         // Break out of while loop.
                         break;
                     }
+
+                    // Increase number of iterations.
+                    numOfIterations += 1;
                 }
             }
 
