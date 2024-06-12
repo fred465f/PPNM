@@ -1,6 +1,6 @@
 /* FourierTransform class in Calculus namespace implements the Cooley-Tukey algorithm for
 the fast Fourier transform as well as the classical discrete Fourier transform as well as
-their respective inverses. */
+their respective inverses. (NOT TESTED YET!)*/
 
 using System;
 using System.Numerics;
