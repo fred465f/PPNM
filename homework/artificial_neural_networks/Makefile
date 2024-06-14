@@ -1,9 +1,10 @@
-all : Out.testPredict.gnuplot.svg Out.testDerivative.gnuplot.svg Out.testDoubleDerivative.gnuplot.svg Out.testAntiDerivative.gnuplot.svg
+all : Out.testPredict.gnuplot.svg Out.testDerivative.gnuplot.svg Out.testDoubleDerivative.gnuplot.svg Out.testAntiDerivative.gnuplot.svg Out.testDiffEqSolver.gnuplot.svg
 
 # Paths to self-made libraries.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
 LIBSPATH2 = ../../Libraries/MachineLearning/
 LIBSPATH3 = ../../Libraries/DataStructures/
+LIBSPATH4 = ../../Libraries/Calculus/
 
 # Images.
 Out.testPredict.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
@@ -57,17 +58,33 @@ Out.testAntiDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
 			set key box height 1 width -3.5 font ", 14" at screen 0.91, 0.26 ;\
 			plot "$<" using 1:8 with lines lc 7 lw 2 title "ANN prediction" ;\
 		' | gnuplot
+Out.testDiffEqSolver.gnuplot.svg : Out.testDiffEqSolverData.txt Makefile
+	echo ' \
+			set terminal svg background "white" ;\
+			set out "$@" ;\
+			set datafile separator "," ;\
+			set xlabel "x" font ", 14" ;\
+			set ylabel "y(x)" font ", 14" ;\
+			set title "Solution of SHO diff. eq. using simple ANN" font ", 14" ;\
+			set grid ;\
+			set key box height 1 width -3.5 font ", 14" at screen 0.45, 0.84 ;\
+			plot "$<" with lines lc 7 lw 2 title "Analytic" ;\
+		' | gnuplot
 
 # Data.
 Out.testNeuralNetworkData.txt : testNeuralNetwork.exe
+	mono $< > $@
+Out.testDiffEqSolverData.txt : testDiffEqSolver.exe
 	mono $< > $@
 
 # Executables.
 testNeuralNetwork.exe : testNeuralNetwork.cs Library.dll
 	mcs -target:exe -out:$@ -reference:Library.dll $<
+testDiffEqSolver.exe : testDiffEqSolver.cs Library.dll
+	mcs -target:exe -out:$@ -reference:Library.dll $<
 
 # Libraries.
-Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)QRGS.cs $(LIBSPATH2)Minimization.cs $(LIBSPATH2)NeuralNetworks.cs $(LIBSPATH3)GenericList.cs
+Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)QRGS.cs $(LIBSPATH2)Minimization.cs $(LIBSPATH2)NeuralNetworks.cs $(LIBSPATH3)GenericList.cs $(LIBSPATH4)AdaptiveIntegrator.cs
 	mcs -target:library -out:$@ $^
 
 # Rule to clean.

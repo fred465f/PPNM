@@ -11,7 +11,7 @@ namespace MachineLearning
 {
     public static class Minimization
     {
-        // Implements Newton method with numerical gradient, numerical Hessian matrix and back-tracking linesearch.
+        // Implements Newton method with numerical gradient, numerical Hessian matrix using forward differences and back-tracking linesearch.
         public static Vector Newton(Func<Vector, double> f, Vector start, double acc)
         {
             // Variables
@@ -62,7 +62,7 @@ namespace MachineLearning
             return x;
         }
         
-        // Implements Quasi-Newton method with numerical gradient, back-tracking linesearch, and rank-1 update.
+        // Implements Quasi-Newton method with numerical gradient, back-tracking linesearch, and symmetric rank-1 update.
         public static Vector QuasiNewton(Func<Vector, double> f, Vector start, double acc)
         {
             // Variables
@@ -90,7 +90,7 @@ namespace MachineLearning
                         Vector y = fGradUpdated - fGrad;
                         Vector u = lambda * xDelta - inverseHessian * y;
 
-                        if (Vector.InnerProduct(u, y) < Pow(10, -6))
+                        if (Vector.InnerProduct(u, y) < Pow(10, -10))
                         {
                             // Reset inverse of Hessian to the identity.
                             inverseHessian = Matrix.Identity(n);
