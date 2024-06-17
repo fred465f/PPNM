@@ -167,21 +167,39 @@ namespace MachineLearning
         double quasiNewtonAcc = 0.00001;
         double adaptiveIntegratorAcc = 0.00001;
         double adaptiveIntegratorEps = 0.00001;
-        Func<double, double> f = z => z * Exp(-Pow(z, 2));
-        Func<double, double> fDerivative = z => Exp(-Pow(z, 2)) - 2*Pow(z, 2)*Exp(-Pow(z, 2));
-        Func<double, double> fDoubleDerivative = z => -6*z*Exp(-Pow(z, 2)) + 4*Pow(z, 3)*Exp(-Pow(z, 2));
+        Func<double, double> f = z => 1/(1 + Exp(-z));
+        Func<double, double> fDerivative = z => Exp(-z)/Pow(1 + Exp(-z), 2);
+        Func<double, double> fDoubleDerivative = z => -Exp(-z)/Pow(1 + Exp(-z), 2) + 2*Exp(-2*z)/Pow(1 + Exp(-z), 3);
 
         // ODE variables.
-        Func<Func<double, double>, Func<double, double>, Func<double, double>, double, double> phi; // phi(y, y', y'', x) = 0.
+        Func<double, double, double, double, double> phi; // phi(y(x), y'(x), y''(x), x) = 0.
         double[] interval = new double[2]; // [a, b].
         double[] initialData = new double[3]; // [c, y(c), y'(c)].
 
-        // Constructor.
-        public ODESolver(Func<Func<double, double>, Func<double, double>, Func<double, double>, double, double> diffEq, double a, double b, double c, double yc, double ycPrime, int numOfHiddenNeurons)
+        // Constructors.
+        public ODESolver(Func<double, double, double, double, double> diffEq, double a, double b, double c, double yc, double ycPrime, int numOfHiddenNeurons)
         {
             // Set network parameters.
             n = numOfHiddenNeurons;
             p = Vector.RandomVector(3*n);
+
+            // Set ODE parameters.
+            phi = diffEq;
+            interval[0] = a;
+            interval[1] = b;
+            initialData[0] = c;
+            initialData[1] = yc;
+            initialData[2] = ycPrime;
+        }
+        public ODESolver(Func<double, double, double, double, double> diffEq, double a, double b, double c, double yc, double ycPrime, int numOfHiddenNeurons, Vector parameters)
+        {
+            // Set network parameters.
+            n = numOfHiddenNeurons;
+            if (parameters.Length != 3*n)
+            {
+                throw new ArgumentException("Number of parameters of simple ANN is incorrect.", $"Number of parameters given {parameters.Length}");
+            }
+            p = parameters.Copy();
 
             // Set ODE parameters.
             phi = diffEq;
@@ -209,18 +227,15 @@ namespace MachineLearning
         private double HelperCostFunction(Vector parameters, double alpha, double beta)
         {
             // Variables.
-            double sum = 0;
+            double sum = 0.0;
 
             // Compute integral contribution to cost function.
-            Func<double, double> y = x => Predict(x);
-            Func<double, double> yPrime = x => Derivative(x);
-            Func<double, double> yDoublePrime = x => DoubleDerivative(x);
-            Func<double, double> integrand = x => Pow(phi(y, yPrime, yDoublePrime, x), 2);
+            Func<double, double> integrand = x => Pow(this.phi(Predict(x, parameters), Derivative(x, parameters), DoubleDerivative(x, parameters), x), 2);
             (double integral, double error, int numSteps) = AdaptiveIntegrator.Integrate(integrand, this.interval[0], this.interval[1], this.adaptiveIntegratorAcc, this.adaptiveIntegratorEps);
             sum += integral;
 
             // Compute initial data contribution to cost function.
-            sum += alpha * Pow(Predict(this.initialData[0]) - this.initialData[1], 2) + beta * Pow(Derivative(this.initialData[0]) - this.initialData[2], 2);
+            sum += alpha * Pow(Predict(this.initialData[0], parameters) - this.initialData[1], 2) + beta * Pow(Derivative(this.initialData[0], parameters) - this.initialData[2], 2);
 
             // Return result.
             return sum;
@@ -236,6 +251,26 @@ namespace MachineLearning
             for (int i = 0; i < this.n; i++)
             {
                 sum += this.f((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
+        public double Predict(double x, Vector parameters)
+        {
+            // Check that given parameters has desired length, otherwise throw an exception.
+            if (parameters.Length != this.p.Length)
+            {
+                throw new ArgumentException("Input parameters had wrong size", $"Input size: {parameters.Length}, should have been {3*this.n}");
+            }
+
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += this.f((x - parameters[3*i])/parameters[3*i + 1]) * parameters[3*i + 2];
             }
 
             // Return result.
@@ -257,6 +292,26 @@ namespace MachineLearning
             // Return result.
             return sum;
         }
+        public double Derivative(double x, Vector parameters)
+        {
+            // Check that given parameters has desired length, otherwise throw an exception.
+            if (parameters.Length != this.p.Length)
+            {
+                throw new ArgumentException("Input parameters had wrong size", $"Input size: {parameters.Length}, should have been {3*this.n}");
+            }
+
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += (1/parameters[3*i + 1]) * this.fDerivative((x - parameters[3*i])/parameters[3*i + 1]) * parameters[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
 
         // Double derivative.
         public double DoubleDerivative(double x)
@@ -268,6 +323,26 @@ namespace MachineLearning
             for (int i = 0; i < this.n; i++)
             {
                 sum += Pow(1/p[3*i + 1], 2) * this.fDoubleDerivative((x - p[3*i])/p[3*i + 1]) * p[3*i + 2];
+            }
+
+            // Return result.
+            return sum;
+        }
+        public double DoubleDerivative(double x, Vector parameters)
+        {
+            // Check that given parameters has desired length, otherwise throw an exception.
+            if (parameters.Length != this.p.Length)
+            {
+                throw new ArgumentException("Input parameters had wrong size", $"Input size: {parameters.Length}, should have been {3*this.n}");
+            }
+
+            // Variables.
+            double sum = 0;
+
+            // Compute prediction of network.
+            for (int i = 0; i < this.n; i++)
+            {
+                sum += Pow(1/parameters[3*i + 1], 2) * this.fDoubleDerivative((x - parameters[3*i])/parameters[3*i + 1]) * parameters[3*i + 2];
             }
 
             // Return result.

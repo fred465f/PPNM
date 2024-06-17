@@ -20,16 +20,16 @@ public class Program
     public static void Main()
     {
         // Variables.
-        int numOfHiddenNeurons = 20;
+        int numOfHiddenNeurons = 4;
         int numOfPoints = 1000;
         double a = 0;
         double b = 5;
         double c = a;
-        double yc = 0;
-        double ycPrime = 0;
+        double yc = 1;
+        double ycPrime = 2;
 
-        // Setting up diff. eq.
-        Func<Func<double, double>, Func<double, double>, Func<double, double>, double, double> diffEq = (y, yPrime, yDoublePrime, x) => y(x);
+        // Setting up diff. eq. of damped harmonic oscillator.
+        Func<double, double, double, double, double> diffEq = delegate(double yx, double yxPrime, double yxDoublePrime, double x) {return yxDoublePrime;};
 
         // Solve diff. eq.
         ODESolver solver = new ODESolver(diffEq, a, b, c, yc, ycPrime, numOfHiddenNeurons);

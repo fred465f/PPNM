@@ -7,7 +7,7 @@ LIBSPATH3 = ../../Libraries/DataStructures/
 LIBSPATH4 = ../../Libraries/Calculus/
 
 # Images.
-Out.testPredict.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
+Out.testPredict.gnuplot.svg : Out.testNeuralNetworkData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
@@ -20,7 +20,7 @@ Out.testPredict.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
 			plot "$<" using 1:2 lt 7 lw 1 lc rgb "#050000000" title "Analytic", \
 			"$<" using 1:5 with lines lc 7 lw 2 title "ANN prediction" ;\
 		' | gnuplot
-Out.testDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
+Out.testDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
@@ -33,7 +33,7 @@ Out.testDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
 			plot "$<" using 1:3 lt 7 lw 1 lc rgb "#050000000" title "Analytic", \
 			"$<" using 1:6 with lines lc 7 lw 2 title "ANN prediction" ;\
 		' | gnuplot
-Out.testDoubleDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
+Out.testDoubleDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
@@ -46,7 +46,7 @@ Out.testDoubleDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
 			plot "$<" using 1:4 lt 7 lw 1 lc rgb "#050000000" title "Analytic", \
 			"$<" using 1:7 with lines lc 7 lw 2 title "ANN prediction" ;\
 		' | gnuplot
-Out.testAntiDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
+Out.testAntiDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
@@ -58,17 +58,16 @@ Out.testAntiDerivative.gnuplot.svg : Out.testNeuralNetworkData.txt Makefile
 			set key box height 1 width -3.5 font ", 14" at screen 0.91, 0.26 ;\
 			plot "$<" using 1:8 with lines lc 7 lw 2 title "ANN prediction" ;\
 		' | gnuplot
-Out.testDiffEqSolver.gnuplot.svg : Out.testDiffEqSolverData.txt Makefile
+Out.testDiffEqSolver.gnuplot.svg : Out.testDiffEqSolverData.txt
 	echo ' \
 			set terminal svg background "white" ;\
 			set out "$@" ;\
 			set datafile separator "," ;\
 			set xlabel "x" font ", 14" ;\
 			set ylabel "y(x)" font ", 14" ;\
-			set title "Solution of SHO diff. eq. using simple ANN" font ", 14" ;\
+			set title "Solution of y´´(x) = 0, with initial data y(0) = 1 and y´(0) = 2, using simple ANN" font ", 14" ;\
 			set grid ;\
-			set key box height 1 width -3.5 font ", 14" at screen 0.45, 0.84 ;\
-			plot "$<" with lines lc 7 lw 2 title "Analytic" ;\
+			plot "$<" with lines lc 7 lw 2 notitle ;\
 		' | gnuplot
 
 # Data.
