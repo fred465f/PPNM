@@ -352,6 +352,18 @@ namespace LinearAlgebra
 			}
 			return C;
 		}
+		public static Matrix Zero(int m, int n)
+		{
+			Matrix C = new Matrix(m, n);
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					C[i, j] = 0;
+				}
+			}
+			return C;
+		}
 
 		// Method returning diagonal elements of square matrix as vector.
 		public Vector Diag()

@@ -9,8 +9,34 @@ using static System.Console;
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
-        WriteLine("Hello!");
+        // Variables.
+        int n = 0;
+        int seed = 1;
+        var rnd = new Random(seed);
+
+        // Process command line input arguments.
+        foreach (var arg in args)
+        {
+            var words = arg.Split(":");
+            if (words[0] == "-size")
+            {
+                n = int.Parse(words[1]);
+            }
+        }
+
+        // Construct random nxn square matrix.
+        Matrix A = new Matrix(n);
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                A[i, j] = rnd.NextDouble();
+            }
+        }
+
+        // Compute SVD.
+        SVD svd = new SVD(A);
     }
 }

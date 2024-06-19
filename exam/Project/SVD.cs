@@ -15,7 +15,7 @@ namespace LinearAlgebra
         public Vector S;
         public int inputNumRows;
         public int inputNumCols;
-        public double absoluteError = 1e-13, relativeError = 1e-13;
+        public double absoluteError = 1e-14, relativeError = 1e-14;
 
         // Constructor.
         public SVD(Matrix A)
@@ -104,19 +104,81 @@ namespace LinearAlgebra
         // Method computes pseudo-inverse of input matrix and returns it.
         public Matrix PseudoInverse()
         {
-            return Matrix.Identity(1);
+            // Initialize memory for pseudo-inverse B (of size nxm) of initial matrix A of size (mxn).
+            Matrix B = new Matrix(inputNumCols, inputNumRows);
+
+            // Compute pseudo-inverse as VS^-U^T. Call C := VS^- for simplicity.
+            Matrix C = V.Copy();
+            for (int i = 0; i < inputNumCols; i++)
+            {
+                double si = S[i];
+                if (Matrix.Approx(si, 0, absoluteError, relativeError))
+                {
+                    C[i] = C[i] * 0;
+                }
+                else
+                {
+                    C[i] = C[i] / S[i];
+                }
+            }
+            B = C * U.T();
+
+            // Return result.
+            return B;
         }
 
         // Method solves Least-Squares problem Ax = b, if system is overdetermined, using pseudo-inverse of A.
         public Vector LeastSquaresSVD(Vector b)
         {
-            return Vector.RandomVector(1);
+            // Check whether system is overdetermined, otherwise throw an error.
+            if (inputNumRows < inputNumCols)
+            {
+                throw new ArgumentException("For least squares method to work, system must be overdetermined.", $"Size of input matrix ({inputNumRows}, {inputNumCols})");
+            }
+            
+            // If A is a tall mxn matrix, then b should be a vector of length m. Throw error if this is not the case.
+            if (b.Length != inputNumRows)
+            {
+                throw new ArgumentException("Wrong size of input vector. Should have length equal to number of rows of input matrix.", $"Length of input vector {b.Length}");
+            }
+
+            // Compute and return least squares solution.
+            return PseudoInverse() * b;
         }
 
-        // Method returns lower rank approximation of input matrix, assuming r < Rank(A).
+        // Method returns lower rank approximation of input matrix, assuming r <= Rank(A).
         public Matrix LowerRankApprox(int r)
         {
-            return Matrix.Identity(1);
+            // Check that r <= Rank(A), otherwise throw an exception.
+            if (r > GetRank())
+            {
+                throw new ArgumentException("The chosen rank r of the approximation should be less than the rank of the input matrix.", $"Input r = {r}, rank of input matrix = {GetRank()}");
+            }
+
+            // Initialize memory for rank-r approximation matrix.
+            Matrix lowerRankApprox = Matrix.Zero(inputNumRows, inputNumCols);
+
+            // Compute rank-r approximation.
+            double previousLargestSV = 2*Vector.Norm(S); // Largest possible singular value is || S ||.
+            for (int l = 0; l < r; l++)
+            {
+                int currentLargestSVIndex = 0;
+                double currentLargestSV = 0;
+                for (int i = 0; i < inputNumCols; i++)
+                {
+                    double si = S[i];
+                    if (si > currentLargestSV && si < previousLargestSV)
+                    {
+                        currentLargestSV = si;
+                        currentLargestSVIndex = i;
+                    }
+                }
+                previousLargestSV = currentLargestSV;
+                lowerRankApprox += currentLargestSV * Vector.OuterProduct(U[currentLargestSVIndex], V[currentLargestSVIndex]);
+            }
+
+            // Return approximation.
+            return lowerRankApprox;
         }
 
         // Method returns rank of input matrix.
@@ -126,9 +188,9 @@ namespace LinearAlgebra
             int rank = 0;
 
             // Find number of non-zero singular values.
-            for (int i = 0; i < this.S.Length; i++)
+            for (int i = 0; i < S.Length; i++)
             {
-                if (!Matrix.Approx(this.S[i], 0))
+                if (!Matrix.Approx(S[i], 0))
                 {
                     rank += 1;
                 }

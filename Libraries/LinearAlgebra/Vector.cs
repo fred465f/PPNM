@@ -119,7 +119,7 @@ namespace LinearAlgebra
 				return false;
 			}
 		}
-		public static bool Approx(Vector v, Vector w)
+		public static bool Approx(Vector v, Vector w, double absoluteError = 1e-9, double relativeError = 1e-9)
 		{
 			if ((v.NumRows != w.NumRows) && (v.NumCols != w.NumCols))
 			{
@@ -131,7 +131,7 @@ namespace LinearAlgebra
 				{
 					for (int j = 0; j < v.NumCols; j++)
 					{
-						if (!Approx(v[i, j], w[i, j]))
+						if (!Approx(v[i, j], w[i, j], absoluteError, relativeError))
 							return false;
 					}
 				}
@@ -266,12 +266,12 @@ namespace LinearAlgebra
 			}
 			else
 			{
-				Matrix outerProduct = new Matrix(w.Length, v.Length);
-				for (int i = 0; i < w.Length; i++)
+				Matrix outerProduct = new Matrix(v.Length, w.Length);
+				for (int i = 0; i < v.Length; i++)
 				{
-					for (int j = 0; j < v.Length; j++)
+					for (int j = 0; j < w.Length; j++)
 					{
-						outerProduct[i, j] = v[j] * w[i];
+						outerProduct[i, j] = v[i] * w[j];
 					}
 				}
 				return outerProduct;

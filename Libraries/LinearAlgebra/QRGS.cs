@@ -52,7 +52,9 @@ namespace LinearAlgebra
         }
 
         /* Method solves A * x = b using decomp. A = Q * R, by rewriting 
-        R * x = Q^T * b and then using back substitution. */
+        R * x = Q^T * b and then using back substitution. In case where A is tall
+        this gives you the least squares solution to the overdetermined system
+        of linear equations. */
         public Vector SolveLinearEq(Vector b)
         {
             Vector x = Q.T() * b;
