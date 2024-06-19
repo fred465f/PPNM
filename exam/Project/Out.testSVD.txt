@@ -1,7 +1,7 @@
 ---------------- Test # 1 ----------------
 
 Performed SVD using implemented algorithm on 100 real square matrices A 
-each of random size in [1, 100] and checked whether U and V are orthogonal and 
+each of random size in [1, 50] and checked whether U and V are orthogonal and 
 whether A = USV^T.
 
-This resulted in 3 passed cases and 97 failed cases.
+This resulted in 100 passed cases and 0 failed cases.

@@ -15,7 +15,7 @@ namespace LinearAlgebra
         public Vector S;
         public int inputNumRows;
         public int inputNumCols;
-        public double absoluteError = 1e-15, relativeError = 1e-15;
+        public double absoluteError = 1e-13, relativeError = 1e-13;
 
         // Constructor.
         public SVD(Matrix A)
@@ -36,7 +36,7 @@ namespace LinearAlgebra
             // Do Jacobi rotations until convergence or until number of sweeps exceeds set limit, indicating that method wont converge.
             bool allColumnsOrthogonal = false;
             int numOfSweeps = 0;
-            while (!allColumnsOrthogonal && numOfSweeps < 10000)
+            while (!allColumnsOrthogonal && numOfSweeps < 100000)
             {
                 // Flip 'allColumnsOrthogonal' during sweep if non-orthogonal columns are found.
                 allColumnsOrthogonal = true;
@@ -52,7 +52,7 @@ namespace LinearAlgebra
 
                         // If corresponding entries are already orthogonal, go on to next index.
                         double aPrimePQ = Vector.InnerProduct(aPrimeP, aPrimeQ);
-                        if (Matrix.Approx(aPrimePQ, 0))
+                        if (Matrix.Approx(aPrimePQ, 0, absoluteError, relativeError))
                         {
                             continue;
                         }
@@ -88,14 +88,14 @@ namespace LinearAlgebra
             {
                 Vector ui = U[i];
                 double si = Vector.Norm(ui);
-                if (Matrix.Approx(si, 0))
+                if (Matrix.Approx(si, 0, absoluteError, relativeError))
                 {
                     U[i] = ui.Apply(x => 0);
                     S[i] = si;
                 }
                 else
                 {
-                    U[i] /= si;
+                    U[i] = ui/si;
                     S[i] = si;
                 }
             }

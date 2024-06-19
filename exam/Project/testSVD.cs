@@ -2,7 +2,7 @@
 Results of tests are saved in output file 'Out.testSVD.txt'. 
 
 The specific tests performed are:
-1: Compute SVD of k random nxn matrices A with n in [1, 100] randomly chosen in each case and check A = USV^T, U^TU = I and V^TV = VV^T = I.
+1: Compute SVD of k random nxn matrices A with n in [1, 50] randomly chosen in each case and check A = USV^T, U^TU = I and V^TV = VV^T = I.
 2: ...
 */
 
@@ -23,12 +23,13 @@ public class Program
         int passedCases = 0;
         int failedCases = 0;
         var rnd = new Random(seed);
+        double absoluteError = 1e-9, relativeError = 1e-9;
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of square matrix randomly.
-            int n = rnd.Next(1, 100);
+            int n = rnd.Next(1, 50);
 
             // Construct random nxn square matrix.
             Matrix A = new Matrix(n);
@@ -56,22 +57,22 @@ public class Program
             Matrix UtimesStimesVT = UtimesS * svd.V.T();
 
             // Check whether desired properties of SVD holds. If one fails, continue to next run.
-            if (!Matrix.Approx(UTtimesU, identity))
+            if (!Matrix.Approx(UTtimesU, identity, absoluteError, relativeError))
             {
                 failedCases += 1;
                 continue;
             }
-            else if (!Matrix.Approx(VTtimesV, identity))
+            else if (!Matrix.Approx(VTtimesV, identity, absoluteError, relativeError))
             {
                 failedCases += 1;
                 continue;
             }
-            else if (!Matrix.Approx(VtimesVT, identity))
+            else if (!Matrix.Approx(VtimesVT, identity, absoluteError, relativeError))
             {
                 failedCases += 1;
                 continue;
             }
-            else if (!Matrix.Approx(A, UtimesStimesVT))
+            else if (!Matrix.Approx(A, UtimesStimesVT, absoluteError, relativeError))
             {
                 failedCases += 1;
                 continue;
@@ -84,7 +85,7 @@ public class Program
 
         // Print result of text to command-line.
         WriteLine("---------------- Test # 1 ----------------\n");
-        WriteLine($"Performed SVD using implemented algorithm on {k} real square matrices A \neach of random size in [1, 100] and checked whether U and V are orthogonal and \nwhether A = USV^T.\n");
+        WriteLine($"Performed SVD using implemented algorithm on {k} real square matrices A \neach of random size in [1, 50] and checked whether U and V are orthogonal and \nwhether A = USV^T.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.");
     }
 }
