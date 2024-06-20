@@ -1,4 +1,4 @@
-all : Out.resourcesSVD.gnuplot.png Out.testSVD.txt
+all : Out.testSVD.txt Out.resourcesSVD.gnuplot.png Out.resourcesSVD.multiprocessing.gnuplot.png
 
 # Paths to self-made libraries.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
@@ -12,21 +12,42 @@ Out.resourcesSVD.gnuplot.png : Out.resourcesSVD.data.txt
 			set ylabel "SVD runtime (s)" ;\
 			set grid ;\
 			set key box top left width 1 height 1  ;\
-			set title "SVD runtime vs. square matrix size" ;\
+			set title "SVD runtime vs. square matrix size (without using multiprocessing)" ;\
 			f(x) = b + (x/a)**c ;\
-			b = 0.01; a = 1; c = 3 ;\
-			fit f(x) "$<" via a, b ;\
+			b = 0.05; a = 162; c = 3 ;\
+			fit f(x) "$<" via a, b, c ;\
+			plot "$<" with lines lw 3 linecolor rgb "#4BB3E1" title "Data", \
+					f(x) with lines lw 3 dashtype 2 linecolor rgb "#050DE1435" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
+		' | gnuplot
+Out.resourcesSVD.multiprocessing.gnuplot.png : Out.resourcesSVD.multiprocessing.data.txt
+	echo '\
+			set terminal pngcairo background "white" ;\
+			set out "$@" ;\
+			set xlabel "Size of square matrix" ;\
+			set ylabel "SVD runtime (s)" ;\
+			set grid ;\
+			set key box top left width 1 height 1  ;\
+			set title "SVD runtime vs. square matrix size (using multiprocessing)" ;\
+			f(x) = b + (x/a)**c ;\
+			b = 0.1; a = 120; c = 3 ;\
+			fit f(x) "$<" via a, b, c ;\
 			plot "$<" with lines lw 3 linecolor rgb "#4BB3E1" title "Data", \
 					f(x) with lines lw 3 dashtype 2 linecolor rgb "#050DE1435" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
 		' | gnuplot
 
 # Data.
 Out.resourcesSVD.data.txt : resourcesSVD.exe
-	for N in $$(seq 10 5 180); do \
+	>$@
+	for N in $$(seq 10 5 150); do \
+		time --format "$$N %e" --output $@ --append \
+		mono $< -size:$$N;\
+	done
+Out.resourcesSVD.multiprocessing.data.txt : resourcesSVD.exe
+	for N in $$(seq 10 5 150); do \
 		time -ao log.$$N -f "$$N %e" mono $< -size:$$N & \
 	done; wait
 	>$@
-	for N in $$(seq 10 5 180); do \
+	for N in $$(seq 10 5 150); do \
 		cat log.$$N >> $@; \
 	done
 	$(RM) log.*

@@ -1,0 +1,43 @@
+---------------- Test # 1 ----------------
+
+Performed SVD using implemented algorithm on 100 real square matrices A 
+each of random size in [1, 50] and checked whether U and V are orthogonal and 
+whether A = USV^T.
+
+This resulted in 100 passed cases and 0 failed cases.
+
+
+---------------- Test # 2 ----------------
+
+Performed SVD using implemented algorithm on 100 real tall matrices A 
+each of random size mxn for m > n in [1, 50] and checked whether U are semi-orthogonal, 
+V are orthogonal and whether A = USV^T.
+
+This resulted in 100 passed cases and 0 failed cases.
+
+
+---------------- Test # 3 ----------------
+
+Performed SVD using implemented algorithm on 100 real tall matrices A 
+each of random size mxn for m > n in [1, 50] and checked whether the pseudo-inverse 
+computed using SVD class satisfies AA^-A = A.
+
+This resulted in 100 passed cases and 0 failed cases.
+
+
+---------------- Test # 4 ----------------
+
+Performed SVD using implemented algorithm on 100 real tall matrices A 
+each of random size mxn for m > n in [1, 50] and checked whether the least squares 
+solution to the overdetermined system of linear equations Ax = b matched the solution 
+obtained using the QR-decomposition algorithm implemented in the homework.
+
+This resulted in 100 passed cases and 0 failed cases.
+
+
+---------------- Test # 5 ----------------
+
+Performed SVD using implemented algorithm on 100 real tall matrices A 
+each of random size mxn for m > n in [1, 50] and checked that in the limiting case where r = Rank(A), that the rank-r approximation of A is equal to A itself.
+
+This resulted in 100 passed cases and 0 failed cases.
