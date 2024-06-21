@@ -8,7 +8,7 @@ The specific tests performed are:
 4: Compute least squares solution to overdetermined system of linear equations Ax = b for k random tall mxn matrices with m > n in [1, 50] randomly chosen in each case,
    using both QR-decomposition and Singular Value Decomposition. QR-decomposition was implemented and tested in a homework.
 5: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case. Testing that the rank-r approximation minimizes the Frobenius norm of
-   the difference between the matrix and its approximation for all rank-r matrices is not easy. So I make a more basic test, checking in the limiting case of r = Rank(A)
+   the difference between the matrix and all rank-r matrices is not easy. So I make a more basic test, checking in the limiting case of r = Rank(A)
    that the approximation is equal to A itself.
 */
 
