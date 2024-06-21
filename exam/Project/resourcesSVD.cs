@@ -4,6 +4,7 @@ Results are saved in Out.resourcesSVD.data.txt. */
 
 using System;
 using LinearAlgebra;
+using System.Diagnostics;
 using static System.Math;
 using static System.Console;
 
@@ -36,7 +37,17 @@ public class Program
             }
         }
 
+        // Create and start clock.
+        Stopwatch watch = new Stopwatch();
+        watch.Start();
+
         // Compute SVD.
         SVD svd = new SVD(A);
+
+        // Stop timer and output result to main output stream.
+        watch.Stop();
+        double elapsedMilliseconds = (double)watch.ElapsedMilliseconds;
+        double elapsedSeconds = elapsedMilliseconds / 1000.0;
+        WriteLine($"{n} {elapsedSeconds}");
     }
 }

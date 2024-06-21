@@ -151,14 +151,13 @@ The <strong>fifth test</strong>, checked functionality method in SVD class provi
 the difference between the matrix and all rank-r matrices is not easy. So I made a more basic test, checking in the limiting case of r = Rank(A) that the approximation is equal to A itself. Matrix equalities are computed up to an absolute- and relative-error of the entries of 10<sup>-9</sup>. It resulted in 100 passed cases and 0 failed cases.
 
 ### Testing time complexity
-I computed the Singular Value Decomposition of random n x n square matrices in the range of n in [10, 150]. This yielded the following result, in clear agreement with our O(n<sup>3</sup>) expectation for the operation count.
+I computed the Singular Value Decomposition of random n x n square matrices in the range of n in [10, 150]. This yielded the following result,
 <p></p>
 <center> <img src="Project/Out.resourcesSVD.gnuplot.png" alt="test for time complexity of one-sided Jacobi algorithm for singular value decomposition" width="550" height="400"> </center>
 <p></p>
-Now since these computations are completely independent, one might as well use multiprocessing when computing them. Doing so yields the following result,
+which is in clear agreement with our O(n<sup>3</sup>) expectation for the operation count.
 <p></p>
-<center> <img src="Project/Out.resourcesSVD.multiprocessing.gnuplot.png" alt="test for time complexity of one-sided Jacobi algorithm for singular value decomposition using multiprocessing" width="550" height="400"> </center>
-<p></p>
-which is clearly not in great agreement with our expectations. (WHY?????)
 
 ### Optimization
+The tall matrices we use in the one-sided Jacobi algorithm, does not have a lot of symmetry (compared to the real symmetric matrices in the Jacobi eigenvalue algorithm), so we will not get any optimization from such considerations. If we were only interested in the singular values, then obvious optimizations could be obtained by not spending both time and memory computing the V and U matrices, but we use them explicitly in applications such as computing Pseudo-Inverses, solving least squares problems and computing lower rank approximations. 
+One slight optimization that I implemented, is to represent the diagonal matrix S in the Singular Value Decomposition as a vector instead of a matrix, thus taking up less memory. By following this line of thought, computing matrix products such as US can be computed efficiently utilizing that S is diagonal, i.e just multiply i'th column of U by i'th diagonal element of S. The operation count for regular naive matrix multiplication goes as O(n<sup>3</sup>) for square matrices, where utilizing the structure of S in products, such as above, improves it to go as O(n<sup>2</sup>), again for square matrices.
