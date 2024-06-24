@@ -1,5 +1,7 @@
 /* Class SVD in LinearAlgebra namespace implements the one-sided Jacobi algorithm
-for Singular Value Decomposition. */
+for singular value decomposition. Applications of the singular value decomposition
+are also implemented; pseudo-inverse solver, least squares problem solver, 
+computation of the Rank of a matrix, lower rank approximation of a matrix. */
 
 using System;
 using LinearAlgebra;
@@ -46,7 +48,8 @@ namespace LinearAlgebra
                 {
                     for (int q = p + 1; q < inputNumCols; q++)
                     {
-                        // Get desired columns of matrix A' = AJ resulting from all Jacobi rotations up until now.
+                        /* Get desired columns of matrix A' = AJ resulting from all Jacobi rotations up until now (A' is what we call U, 
+                        I just follow the notes convention for naming of the column vectors, to make it easier to compare with eq.'s in the notes). */
                         Vector aPrimeP = U[p];
                         Vector aPrimeQ = U[q];
 
@@ -61,12 +64,12 @@ namespace LinearAlgebra
                             allColumnsOrthogonal = false;
                         }
 
-                        // Compute angle theta in J(p, q, theta) making A[p] and A[q] orthogonal.
+                        // Compute angle theta in J(p, q, theta) making p'th and q'th column vectors in A' * J(p, q, theta) orthogonal.
                         double aPrimePP = Vector.InnerProduct(aPrimeP, aPrimeP);
                         double aPrimeQQ = Vector.InnerProduct(aPrimeQ, aPrimeQ);
                         double theta = 0.5 * Atan2(2 * aPrimePQ, aPrimeQQ - aPrimePP);
 
-                        // Do Jacobi rotation inplace on both A' and V.
+                        // Do Jacobi rotation inplace on both U and V.
                         double s = Sin(theta), c = Cos(theta);
                         U[p] = c * aPrimeP - s * aPrimeQ;
                         U[q] = s * aPrimeP + c * aPrimeQ;
@@ -104,7 +107,7 @@ namespace LinearAlgebra
         // Method computes pseudo-inverse of input matrix and returns it.
         public Matrix PseudoInverse()
         {
-            // Initialize memory for pseudo-inverse B (of size nxm) of initial matrix A of size (mxn).
+            // Initialize memory for pseudo-inverse B (of size nxm) of initial matrix A (of size mxn).
             Matrix B = new Matrix(inputNumCols, inputNumRows);
 
             // Compute pseudo-inverse as VS^-U^T. Call C := VS^- for simplicity.
@@ -127,7 +130,7 @@ namespace LinearAlgebra
             return B;
         }
 
-        // Method solves Least-Squares problem Ax = b, if system is overdetermined, using pseudo-inverse of A.
+        // Method solves least squares problem Ax = b, if system is overdetermined, using pseudo-inverse of A.
         public Vector LeastSquaresSVD(Vector b)
         {
             // Check whether system is overdetermined, otherwise throw an error.
@@ -158,7 +161,7 @@ namespace LinearAlgebra
             // Initialize memory for rank-r approximation matrix.
             Matrix lowerRankApprox = Matrix.Zero(inputNumRows, inputNumCols);
 
-            // Compute rank-r approximation.
+            // Compute rank-r approximation using formula in README.md file.
             double previousLargestSV = 2*Vector.Norm(S); // Largest possible singular value is || S ||.
             for (int l = 0; l < r; l++)
             {

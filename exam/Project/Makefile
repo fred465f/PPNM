@@ -1,7 +1,9 @@
 all : Out.testSVD.txt Out.resourcesSVD.gnuplot.png
+
+# Path to external self-made library.
 LIBSPATH1 = ../../Libraries/LinearAlgebra/
 
-# Images.
+# Image.
 Out.resourcesSVD.gnuplot.png : Out.resourcesSVD.data.txt
 	echo '\
 			set terminal pngcairo background "white" ;\
@@ -25,9 +27,16 @@ Out.resourcesSVD.data.txt : resourcesSVD.exe
 		mono $< -size:$$N >> $@;\
 	done
 
-# Main commandline output.
+# Main commandline output. Implementation avoids race conditions even though it should not be a prominent problem for five threads.
 Out.testSVD.txt : testSVD.exe
-	mono $< > $@
+	for N in $$(seq 1 1 5); do \
+		mono $< -testNumber:$$N >> log.$$N & \
+	done; wait
+	>$@
+	for N in $$(seq 1 1 5); do \
+		cat log.$$N >> $@; \
+	done
+	$(RM) log.*
 
 # Executables.
 testSVD.exe : testSVD.cs Library.dll

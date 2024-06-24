@@ -1,12 +1,13 @@
-/* Program tests all the implemented features in SVD class in LinearAlgebra namespace.
+/*
+Program tests all the implemented features in SVD class in LinearAlgebra namespace.
 Results of tests are saved in output file 'Out.testSVD.txt'. 
 
 The specific tests performed are:
 1: Compute SVD of k random nxn matrices A with n in [1, 50] randomly chosen in each case and check A = USV^T, U^TU = I and V^TV = VV^T = I.
 2: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case and check A = USV^T, U^TU = I and V^TV = VV^T = I.
-3: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case and checked whether computed pseudo-inverse A^- satisfied AA^-A = A.
+3: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case and check whether computed Pseudo-Inverse A^- satisfies AA^-A = A.
 4: Compute least squares solution to overdetermined system of linear equations Ax = b for k random tall mxn matrices with m > n in [1, 50] randomly chosen in each case,
-   using both QR-decomposition and Singular Value Decomposition. QR-decomposition was implemented and tested in a homework.
+   using both QR-decomposition and singular value decomposition. Check that both methods agree. QR-decomposition was implemented and tested in a homework.
 5: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case. Testing that the rank-r approximation minimizes the Frobenius norm of
    the difference between the matrix and all rank-r matrices is not easy. So I make a more basic test, checking in the limiting case of r = Rank(A)
    that the approximation is equal to A itself.
@@ -19,23 +20,60 @@ using static System.Console;
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
-        // ----------------------- Test # 1 -----------------------
-
         // Variables.
         int k = 100;
         int seed = 1;
+        int testNumber = 0;
+        double absoluteError = 1e-9, relativeError = 1e-9;
+
+        // Process command line input arguments.
+        foreach (var arg in args)
+        {
+            var words = arg.Split(":");
+            if (words[0] == "-testNumber")
+            {
+                testNumber = int.Parse(words[1]);
+            }
+        }
+
+        // Run desired test k number of times and check results within preset absolute/relative errors.
+        if (testNumber == 1)
+        {
+            RunTestNumberOne(k, seed, absoluteError, relativeError);
+        }
+        else if (testNumber == 2)
+        {
+            RunTestNumberTwo(k, seed, absoluteError, relativeError);
+        }
+        else if (testNumber == 3)
+        {
+            RunTestNumberThree(k, seed, absoluteError, relativeError);
+        }
+        else if (testNumber == 4)
+        {
+            RunTestNumberFour(k, seed, absoluteError, relativeError);
+        }
+        else if (testNumber == 5)
+        {
+            RunTestNumberFive(k, seed, absoluteError, relativeError);
+        }
+    }
+
+    // Static method runs test # 1.
+    public static void RunTestNumberOne(int k, int seed, double absoluteError, double relativeError)
+    {
+        // Variables.
         int passedCases = 0;
         int failedCases = 0;
         var rnd = new Random(seed);
-        double absoluteError = 1e-9, relativeError = 1e-9;
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of square matrix randomly.
-            int n = rnd.Next(1, 50);
+            int n = rnd.Next(1, 51);
 
             // Construct random nxn square matrix.
             Matrix A = new Matrix(n);
@@ -93,20 +131,22 @@ public class Program
         WriteLine("---------------- Test # 1 ----------------\n");
         WriteLine($"Performed SVD using implemented algorithm on {k} real square matrices A \neach of random size in [1, 50] and checked whether U and V are orthogonal and \nwhether A = USV^T.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
+    }
 
-
-        // ----------------------- Test # 2 -----------------------
-
+    // Static method runs test # 2.
+    public static void RunTestNumberTwo(int k, int seed, double absoluteError, double relativeError)
+    {
         // Variables.
-        passedCases = 0;
-        failedCases = 0;
+        int passedCases = 0;
+        int failedCases = 0;
+        var rnd = new Random(seed);
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of tall matrix randomly.
-            int n = rnd.Next(1, 50);
-            int m = rnd.Next(n, 50);
+            int n = rnd.Next(1, 51);
+            int m = rnd.Next(n, 51);
 
             // Construct random mxn tall matrix.
             Matrix A = new Matrix(m, n);
@@ -164,20 +204,22 @@ public class Program
         WriteLine("---------------- Test # 2 ----------------\n");
         WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked whether U are semi-orthogonal, \nV are orthogonal and whether A = USV^T.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
+    }
 
-
-        // ----------------------- Test # 3 -----------------------
-
+    // Static method runs test # 3.
+    public static void RunTestNumberThree(int k, int seed, double absoluteError, double relativeError)
+    {
         // Variables.
-        passedCases = 0;
-        failedCases = 0;
+        int passedCases = 0;
+        int failedCases = 0;
+        var rnd = new Random(seed);
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of tall matrix randomly.
-            int n = rnd.Next(1, 50);
-            int m = rnd.Next(n, 50);
+            int n = rnd.Next(1, 51);
+            int m = rnd.Next(n, 51);
 
             // Construct random mxn tall matrix.
             Matrix A = new Matrix(m, n);
@@ -210,20 +252,22 @@ public class Program
         WriteLine("---------------- Test # 3 ----------------\n");
         WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked whether the pseudo-inverse \ncomputed using SVD class satisfies AA^-A = A.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
+    }
 
-
-        // ----------------------- Test # 4 -----------------------
-
+    // Static method runs test # 4.
+    public static void RunTestNumberFour(int k, int seed, double absoluteError, double relativeError)
+    {
         // Variables.
-        passedCases = 0;
-        failedCases = 0;
+        int passedCases = 0;
+        int failedCases = 0;
+        var rnd = new Random(seed);
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of tall matrix randomly.
-            int n = rnd.Next(1, 50);
-            int m = rnd.Next(n, 50);
+            int n = rnd.Next(1, 51);
+            int m = rnd.Next(n, 51);
 
             // Construct random mxn tall matrix and vector of length m.
             Matrix A = new Matrix(m, n);
@@ -262,20 +306,22 @@ public class Program
         WriteLine("---------------- Test # 4 ----------------\n");
         WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked whether the least squares \nsolution to the overdetermined system of linear equations Ax = b matched the solution \nobtained using the QR-decomposition algorithm implemented in the homework.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
+    }
 
-
-        // ----------------------- Test # 5 -----------------------
-
+    // Static method runs test # 5.
+    public static void RunTestNumberFive(int k, int seed, double absoluteError, double relativeError)
+    {
         // Variables.
-        passedCases = 0;
-        failedCases = 0;
+        int passedCases = 0;
+        int failedCases = 0;
+        var rnd = new Random(seed);
 
         // Perform test.
         for (int l = 0; l < k; l++)
         {
             // Choose size of tall matrix randomly.
-            int n = rnd.Next(1, 50);
-            int m = rnd.Next(n, 50);
+            int n = rnd.Next(1, 51);
+            int m = rnd.Next(n, 51);
 
             // Construct random mxn tall matrix and vector of length m.
             Matrix A = new Matrix(m, n);
