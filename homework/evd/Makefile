@@ -65,7 +65,7 @@ Out.resources.gnuplot.png : Out.resourcesData.txt
 			set title "Diagonalization runtime vs. square matrix size" ;\
 			f(x) = b + (x/a)**c ;\
 			b = 1; a = 90; c = 3 ;\
-			fit f(x) "$<" via a, b ;\
+			fit f(x) "$<" via a, b, c ;\
 			plot "$<" with lines lw 3 linecolor rgb "#4BB3E1" title "Data", \
 					f(x) with lines lw 3 dashtype 2 linecolor rgb "#050DE1435" title sprintf("Fit: (x/%.f)^{%.2f} + %.3f", a, c, b) ;\
 		' | gnuplot
@@ -90,14 +90,9 @@ Out.drConvergenceData.txt : convergence.exe
 	done
 	$(RM) log.*
 Out.resourcesData.txt : resources.exe
-	for N in $$(seq 100 5 300); do \
-		time -ao log.$$N -f "$$N %e" mono $< -size:$$N & \
-	done; wait
-	>$@
-	for N in $$(seq 100 5 300); do \
-		cat log.$$N >> $@; \
-	done
-	$(RM) log.*
+	for N in $$(seq 10 5 200); do \
+		mono $< -size:$$N >> $@; \
+	done;
 Out.numericalWaveFunctionsData.txt : numericalWaveFunctions.exe
 	mono $< -rMax:14 -dr:0.3 -outFile:$@
 Out.analyticalWaveFunctionsData.txt : analyticalWaveFunctions.exe

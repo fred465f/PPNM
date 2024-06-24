@@ -2,6 +2,7 @@
 
 using System;
 using LinearAlgebra;
+using System.Diagnostics;
 using static System.Console;
 using static System.Math;
 
@@ -9,15 +10,31 @@ class Program
 {
 	static void Main(string[] args)
 	{
+		// Variables.
+        int size = 100;
+
+		// Process command line input arguments.
 		foreach (var arg in args)
 		{
             var words = arg.Split(":");
             if (words[0] == "-size")
             {
-			    int m = int.Parse(words[1]);
-			    DoQRDecomp(m);
+			    size = int.Parse(words[1]);
             }
 		}
+
+		// Create and start clock.
+        Stopwatch watch = new Stopwatch();
+        watch.Start();
+
+		// Do QR-decomposition.
+		DoQRDecomp(size);
+
+		// Stop timer and output result to main output stream.
+        watch.Stop();
+        double elapsedMilliseconds = (double)watch.ElapsedMilliseconds;
+        double elapsedSeconds = elapsedMilliseconds / 1000.0;
+        WriteLine($"{size} {elapsedSeconds}");
 	}
 
 	// Method to do QR-decomp on random input size matrix.

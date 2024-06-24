@@ -5,6 +5,7 @@ Jacobi rotations only needs to be performed in upper triangular part of input ma
 
 using System;
 using LinearAlgebra;
+using System.Diagnostics;
 using static System.Math;
 using static System.Console;
 
@@ -25,8 +26,18 @@ class Program
                 }
             }
 
+            // Create and start clock.
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             // Diagonalize random symmetric (n, n) matrix.
             DiagonalizeRandomMatrix(size);
+
+            // Stop timer and output result to main output stream.
+            watch.Stop();
+            double elapsedMilliseconds = (double)watch.ElapsedMilliseconds;
+            double elapsedSeconds = elapsedMilliseconds / 1000.0;
+            WriteLine($"{size} {elapsedSeconds}");
         }
 
         // Static method to check diagonalize random symmetric (n, n) matrix.

@@ -1,36 +1,38 @@
 
 
 *******************************************************************************
-Thu Apr 25 17:39:25 2024
+Mon Jun 24 10:54:37 2024
 
 
 FIT:    data read from "Out.resourcesData.txt"
         format = z
-        #datapoints = 41
+        #datapoints = 39
         residuals are weighted equally (unit weight)
 
 function used for fitting: f(x)
 	f(x) = b + (x/a)**c
 fitted parameters initialized with current variable values
 
-iter      chisq       delta/lim  lambda   a             b            
-   0 9.3998780627e+03   0.00e+00  3.69e+01    9.000000e+01   1.000000e+00
-   6 5.0321006830e+00  -6.19e-01  3.69e-05    1.790399e+02   1.094799e+00
+iter      chisq       delta/lim  lambda   a             b             c            
+   0 9.5474096861e+02   0.00e+00  9.21e+00    9.000000e+01   1.000000e+00   3.000000e+00
+   8 5.6994136328e-04  -3.17e-03  9.21e-08    2.690283e+02   2.696201e-03   2.993409e+00
 
-After 6 iterations the fit converged.
-final sum of squares of residuals : 5.0321
-rel. change during last iteration : -6.19129e-06
+After 8 iterations the fit converged.
+final sum of squares of residuals : 0.000569941
+rel. change during last iteration : -3.1689e-08
 
-degrees of freedom    (FIT_NDF)                        : 39
-rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.359205
-variance of residuals (reduced chisquare) = WSSR/ndf   : 0.129028
+degrees of freedom    (FIT_NDF)                        : 36
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00397891
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.58317e-05
 
 Final set of parameters            Asymptotic Standard Error
 =======================            ==========================
-a               = 179.04           +/- 2.499        (1.396%)
-b               = 1.0948           +/- 0.09249      (8.448%)
+a               = 269.028          +/- 1.227        (0.456%)
+b               = 0.0026962        +/- 0.001184     (43.93%)
+c               = 2.99341          +/- 0.03721      (1.243%)
 
 correlation matrix of the fit parameters:
-                a      b      
+                a      b      c      
 a               1.000 
-b               0.795  1.000 
+b              -0.443  1.000 
+c              -0.923  0.685  1.000 
