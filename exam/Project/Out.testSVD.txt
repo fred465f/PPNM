@@ -37,7 +37,16 @@ This resulted in 100 passed cases and 0 failed cases.
 
 ---------------- Test # 5 ----------------
 
+
 Performed SVD using implemented algorithm on 100 real tall matrices A 
 each of random size mxn for m > n in [1, 50] and checked that in the limiting case where r = Rank(A), that the rank-r approximation of A is equal to A itself.
 
 This resulted in 100 passed cases and 0 failed cases.
+---------------- Test # 6 ----------------
+
+Performed SVD using implemented algorithm on 100 real symmetric square matrices A 
+each of random size in [1, 50] and checked whether the computed rank agreed with the one obtained using EVD of A.
+
+This resulted in 100 passed cases and 0 failed cases.
+
+

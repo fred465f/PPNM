@@ -29,11 +29,11 @@ Out.resourcesSVD.data.txt : resourcesSVD.exe
 
 # Main commandline output. Implementation avoids race conditions even though it should not be a prominent problem for five threads.
 Out.testSVD.txt : testSVD.exe
-	for N in $$(seq 1 1 5); do \
+	for N in $$(seq 1 1 6); do \
 		mono $< -testNumber:$$N >> log.$$N & \
 	done; wait
 	>$@
-	for N in $$(seq 1 1 5); do \
+	for N in $$(seq 1 1 6); do \
 		cat log.$$N >> $@; \
 	done
 	$(RM) log.*
@@ -45,7 +45,7 @@ resourcesSVD.exe : resourcesSVD.cs Library.dll
 	mcs -target:exe -out:$@ -reference:Library.dll $<
 
 # Libraries.
-Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)QRGS.cs SVD.cs
+Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)QRGS.cs $(LIBSPATH1)EVD.cs SVD.cs
 	mcs -target:library -out:$@ $^
 
 # Rule to clean.

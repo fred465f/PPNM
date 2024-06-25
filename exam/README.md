@@ -149,6 +149,16 @@ to the overdetermined system of linear equations Ax = b, agreed with the one com
 <p></p>
 The <strong>fifth test</strong>, checked functionality method in SVD class providing rank-r approximation on k = 100 tall matrices A each of size m x n chosen randomly each s.t. m > n and m, n = 1, ... , 50. . Testing that the rank-r approximation minimizes the Frobenius norm of
 the difference between the matrix and all rank-r matrices is not easy. So I made a more basic test, checking in the limiting case of r = Rank(A) that the approximation is equal to A itself. Matrix equalities are computed up to an absolute- and relative-error of the entries of 10<sup>-9</sup>. It resulted in 100 passed cases and 0 failed cases.
+<p></p>
+The <strong>sixth test</strong>, checked functionality of the method in the SVD class providing the rank of input matrix A. Determining this rank without use of SVD would in general require us to determine the number (null(A)) of linearly independent solutions b = (b<sub>1</sub> ... b<sub>n</sub>)<sup>T</sup> to the eq.:
+<p></p>
+<center> Ab = b<sub>1</sub>a<sub>1</sub> + ... + b<sub>n</sub>a<sub>n</sub> = 0, </center>
+<p></p>
+where a<sub>i</sub> is the i'th column of A and b<sub>i</sub> are real numbers. Then 
+<p></p>
+<center> rank(A) = n - null(A). </center>
+<p></p>
+by the rank-nullity theorem. Instead of considering this general complicated case, I will make a more basic test, by assuming that A is a square symmetric matrix. In this case we can use the Jacobi eigenvalue algorithm implemented in a homework to compute the eigenvalue decomposition of A. In the basis of eigenvectors A is diagonal, with diagonal entries being the eigenvalues of A. Since the rank is basis independent, we can compute it in this basis, where it is obvious that the rank(A) is the number of non-zero eigenvalues. The rank computed using this method is compared to the one computed using the SVD of A. Equalities of doubles are computed up to an absolute- and relative-error of 10<sup>-9</sup>. It resulted in 100 passed cases and 0 failed cases.
 
 ### Testing time complexity
 I computed the singular value decomposition of random n x n square matrices in the range of n in [10, 150]. This yielded the following result,
@@ -162,4 +172,4 @@ which is in clear agreement with our O(n<sup>3</sup>) expectation for the operat
 The tall matrices we use in the one-sided Jacobi algorithm, does not have a lot of symmetry (compared to the real symmetric matrices in the Jacobi eigenvalue algorithm), so we will not get any optimization from such considerations. If we were only interested in the singular values, then obvious optimizations could be obtained by not spending both time and memory computing the V and U matrices, but we use them explicitly in applications such as computing pseudo-inverses, solving least squares problems and computing lower rank approximations. 
 One slight optimization that I implemented, is to represent the diagonal matrix S in the singular value decomposition as a vector instead of a matrix, thus taking up less memory. By following this line of thought, computing matrix products such as US can be computed efficiently utilizing that S is diagonal, i.e just multiply i'th column of U by i'th diagonal element of S. The operation count for regular naive matrix multiplication goes as O(n<sup>3</sup>) for square matrices, where utilizing the structure of S in products, such as above, improves it to go as O(n<sup>2</sup>), again for square matrices.
 <p></p>
-As for optimizations of the tests, one should utilize that each test is independent, so they could each be run on a separate processor each, if there are at least 5 processors available, which there is on my computer. This is implemented in the Makefile of the project.
+As for optimizations of the tests, one should utilize that each test is independent, so they could each be run on a separate processor each, if there are at least 6 processors available, which there is on my computer. This is implemented in the Makefile of the project. In the case of fewer than 6 processors, each test will be run on a separate thread, which will run on a separate processor whenever one is available and thus still provide a speed up. Even though we only have 6 threads, I accounted for race-conditions in the Makefile, to ensure that these does not slow down the potential speed up.

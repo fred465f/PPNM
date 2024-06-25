@@ -11,6 +11,13 @@ The specific tests performed are:
 5: Compute SVD of k random tall mxn matrices A with m > n in [1, 50] randomly chosen in each case. Testing that the rank-r approximation minimizes the Frobenius norm of
    the difference between the matrix and all rank-r matrices is not easy. So I make a more basic test, checking in the limiting case of r = Rank(A)
    that the approximation is equal to A itself.
+6: Compute SVD of k random symmetric nxn matrices A with n in [1, 50] randomly chosen in each case. To test the rank computation implemented in the SVD class, would require
+   us to determine the number of linearly independent columns (ai) of our matrix, which in general would require us to determine the number of linearly independent
+   non-trivial solutions to the eq.:
+                                                b1*a1 + ... + bn*an = 0,       bi are real numbers.
+   Instead of testing this general complicated case, I make a more basic test by assuming that A is a square symmetric matrix. In this case we can use
+   the Jacobi eigenvalue algorithm to compute EVD of A. In the basis of eigenvectors the rank is particularly easy to compute as the number of non-zero eigenvalues. These
+   two methods are then compared.
 */
 
 using System;
@@ -58,6 +65,10 @@ public class Program
         else if (testNumber == 5)
         {
             RunTestNumberFive(k, seed, absoluteError, relativeError);
+        }
+        else if (testNumber == 6)
+        {
+            RunTestNumberSix(k, seed, absoluteError, relativeError);
         }
     }
 
@@ -351,8 +362,76 @@ public class Program
         }
 
         // Print result of text to command-line.
-        WriteLine("---------------- Test # 5 ----------------\n");
+        WriteLine("---------------- Test # 5 ----------------\n\n");
         WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked that in the limiting case where r = Rank(A), that the rank-r approximation of A is equal to A itself.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.");
+    }
+
+    // Static method runs test # 6.
+    public static void RunTestNumberSix(int k, int seed, double absoluteError, double relativeError)
+    {
+        // Variables.
+        int passedCases = 0;
+        int failedCases = 0;
+        var rnd = new Random(seed);
+
+        // Perform test.
+        for (int l = 0; l < k; l++)
+        {
+            // Choose size of square matrix randomly.
+            int n = rnd.Next(1, 51);
+
+            // Construct random symmetric nxn square matrix.
+            Matrix A = new Matrix(n);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i; j < n; j++)
+                {
+                    if (j == i)
+                    {
+                        A[i, i] = rnd.NextDouble();
+                    }
+                    else
+                    {
+                        double entry = rnd.NextDouble();
+                        A[i, j] = entry;
+                        A[j, i] = entry;
+                    }
+                }
+            }
+
+            // Compute SVD.
+            SVD svd = new SVD(A);
+
+            // Compute EVD.
+            EVD evd = new EVD(A);
+
+            // Compare rank of A both using SVD and EVD.
+            int rankSVD = svd.GetRank();
+            int rankEVD = 0;
+            Vector eigenValues = evd.w;
+            for (int i = 0; i < eigenValues.Length; i++)
+            {
+                if (!Matrix.Approx(eigenValues[i], 0))
+                {
+                    rankEVD += 1;
+                }     
+            }
+
+            // Compare rank computations.
+            if (rankEVD == rankSVD)
+            {
+                passedCases += 1;
+            }
+            else
+            {
+                failedCases += 1;
+            }
+        }
+
+        // Print result of text to command-line.
+        WriteLine("---------------- Test # 6 ----------------\n");
+        WriteLine($"Performed SVD using implemented algorithm on {k} real symmetric square matrices A \neach of random size in [1, 50] and checked whether the computed rank agreed with the one obtained using EVD of A.\n");
+        WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
     }
 }
