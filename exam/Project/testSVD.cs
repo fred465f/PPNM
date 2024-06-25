@@ -362,9 +362,9 @@ public class Program
         }
 
         // Print result of text to command-line.
-        WriteLine("---------------- Test # 5 ----------------\n\n");
-        WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked that in the limiting case where r = Rank(A), that the rank-r approximation of A is equal to A itself.\n");
-        WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.");
+        WriteLine("---------------- Test # 5 ----------------\n");
+        WriteLine($"Performed SVD using implemented algorithm on {k} real tall matrices A \neach of random size mxn for m > n in [1, 50] and checked that in the limiting case \nwhere r = Rank(A), that the rank-r approximation of A is equal to A itself.\n");
+        WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
     }
 
     // Static method runs test # 6.
@@ -431,7 +431,7 @@ public class Program
 
         // Print result of text to command-line.
         WriteLine("---------------- Test # 6 ----------------\n");
-        WriteLine($"Performed SVD using implemented algorithm on {k} real symmetric square matrices A \neach of random size in [1, 50] and checked whether the computed rank agreed with the one obtained using EVD of A.\n");
+        WriteLine($"Performed SVD using implemented algorithm on {k} real symmetric square matrices A \neach of random size in [1, 50] and checked whether the computed rank agreed with the \none obtained using EVD of A.\n");
         WriteLine($"This resulted in {passedCases} passed cases and {failedCases} failed cases.\n\n");
     }
 }
