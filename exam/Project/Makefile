@@ -50,4 +50,4 @@ Library.dll : $(LIBSPATH1)Matrix.cs $(LIBSPATH1)Vector.cs $(LIBSPATH1)QRGS.cs $(
 
 # Rule to clean.
 clean : 
-	$(RM) *.exe [Oo]ut.* *.dll log.*
+	$(RM) *.exe [Oo]ut.* *.dll log.* fit.*
