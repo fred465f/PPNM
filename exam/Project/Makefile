@@ -27,7 +27,7 @@ Out.resourcesSVD.data.txt : resourcesSVD.exe
 		mono $< -size:$$N >> $@;\
 	done
 
-# Main commandline output. Implementation avoids race conditions even though it should not be a prominent problem for five threads.
+# Main commandline output. Implementation avoids race conditions even though it should not be a prominent problem for six threads.
 Out.testSVD.txt : testSVD.exe
 	for N in $$(seq 1 1 6); do \
 		mono $< -testNumber:$$N >> log.$$N & \
